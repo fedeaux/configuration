@@ -13,6 +13,7 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (toggle-scroll-bar -1)
+(scroll-bar-mode -1)
 (iswitchb-mode 1)
 (delete-selection-mode 1)
 (column-number-mode 1)
@@ -25,6 +26,7 @@
 (global-set-key "\C-Z" 'undo)
 
 (global-set-key "\C-X\C-R" 'replace-string)
+(global-set-key (kbd "\C-C\C-R") 'comment-or-uncomment-region)
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
@@ -72,17 +74,17 @@
       indent-tabs-mode nil)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(global-set-key (kbd "\C-R") 'comment-or-uncomment-region)
-
 (require 'auto-complete-config)
 (ac-config-default)
-
 
 ;; Hooks
 (defun coffee-custom ()
   "coffee-mode-hook"
   (make-local-variable 'tab-width)
-  (set 'tab-width 2))
+  (set 'tab-width 2)
+  (global-unset-key "\C-C\C-R")
+  (global-set-key (kbd "\C-C\C-R") 'comment-or-uncomment-region)
+)
 
 (add-hook 'coffee-mode-hook 'coffee-custom)
 

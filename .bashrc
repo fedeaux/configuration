@@ -11,15 +11,27 @@ alias a='ack-grep'
 alias c='clear'
 alias l='ls -la'
 alias o='xdg-open'
+alias pag='ps aux | grep'
 
 alias size='du -sh'
 alias rb='. ~/.bashrc'
 
+# ssh aliases
+alias ssh_evrm="ssh evrm_admin@ftp.wemoveapp.com"
+
 # libraries
 alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py'
+alias min_js='ruby ~/Work/everywhere/related/js_minifier.rb'
 
 # watchers
 alias cw='compass watch .'
+alias csw='coffee -wc -o js/ coffee/'
+alias jw='ruby ~/Work/everywhere/related/jsv/coffee_jsv.rb .'
+
+# android export paths
+export PATH=$PATH:~/Libraries/adt-bundle-linux-x86_64-20130522/sdk/tools
+export PATH=$PATH:~/Libraries/adt-bundle-linux-x86_64-20130522/sdk/platform-tools
+export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
