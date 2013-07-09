@@ -26,7 +26,8 @@
 (global-set-key "\C-Z" 'undo)
 
 (global-set-key "\C-X\C-R" 'replace-string)
-(global-set-key (kbd "\C-C\C-R") 'comment-or-uncomment-region)
+(global-set-key (kbd "\C-C-") 'comment-or-uncomment-region)
+(global-set-key "\C-X\C-L" 'goto-line)
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
@@ -54,6 +55,8 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+(add-to-list 'auto-mode-alist '("\\.cjsv\\'" . sass-mode))
 
 (toggle-fullscreen)
 (custom-set-variables

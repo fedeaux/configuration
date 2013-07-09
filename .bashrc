@@ -22,16 +22,32 @@ alias ssh_evrm="ssh evrm_admin@ftp.wemoveapp.com"
 # libraries
 alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py'
 alias min_js='ruby ~/Work/everywhere/related/js_minifier.rb'
+alias sr2='ruby ~/Desktop/.ffrr.rb'
+alias sr='ruby ~/Desktop/.ffrr-gst.rb'
 
 # watchers
 alias cw='compass watch .'
 alias csw='coffee -wc -o js/ coffee/'
 alias jw='ruby ~/Work/everywhere/related/jsv/coffee_jsv.rb .'
 
+#alias  '
+
+#dw() {
+#    terminator -m -b -l develop_web -T "Watching Coffee, CJSV and Compass" --working-directory $1 &
+#}
+
 # android export paths
 export PATH=$PATH:~/Libraries/adt-bundle-linux-x86_64-20130522/sdk/tools
 export PATH=$PATH:~/Libraries/adt-bundle-linux-x86_64-20130522/sdk/platform-tools
 export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
+
+# android development
+alias lc='adb logcat | grep Web'
+alias adi='ant debug install'
+
+# common tasks
+alias dev_index='rm index.html; ln -s index_dev.html index.html'
+alias dep_index='rm index.html; ln -s index_dep.html index.html'
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
