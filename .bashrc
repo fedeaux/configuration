@@ -20,8 +20,9 @@ alias rb='. ~/.bashrc'
 alias ssh_evrm="ssh evrm_admin@ftp.wemoveapp.com"
 
 # libraries
-alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py'
+alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py' #git update remote
 alias min_js='ruby ~/Work/everywhere/related/js_minifier.rb'
+alias sls='ruby ~/Work/everywhere/related/logger/logger.rb' #start log server
 alias sr2='ruby ~/Desktop/.ffrr.rb'
 alias sr='ruby ~/Desktop/.ffrr-gst.rb'
 

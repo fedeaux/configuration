@@ -26,8 +26,10 @@
 (global-set-key "\C-Z" 'undo)
 
 (global-set-key "\C-X\C-R" 'replace-string)
-(global-set-key (kbd "\C-C-") 'comment-or-uncomment-region)
+(global-set-key "\C-C\C-C" 'comment-or-uncomment-region)
 (global-set-key "\C-X\C-L" 'goto-line)
+
+(global-unset-key "\C-X\C-Z")
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
@@ -85,8 +87,6 @@
   "coffee-mode-hook"
   (make-local-variable 'tab-width)
   (set 'tab-width 2)
-  (global-unset-key "\C-C\C-R")
-  (global-set-key (kbd "\C-C\C-R") 'comment-or-uncomment-region)
 )
 
 (add-hook 'coffee-mode-hook 'coffee-custom)
