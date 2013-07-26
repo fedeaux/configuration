@@ -41,10 +41,13 @@ alias jw='ruby ~/Work/everywhere/related/jsv/coffee_jsv.rb .'
 export PATH=$PATH:~/Libraries/adt-bundle-linux-x86_64-20130522/sdk/tools
 export PATH=$PATH:~/Libraries/adt-bundle-linux-x86_64-20130522/sdk/platform-tools
 export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
+export ANDROID_HOME=~/android-sdks/
 
 # android development
-alias lc='adb logcat | grep Web'
+alias lcw='adb logcat | grep -E "Web Console|InAppBrowser|Cordova"'
 alias adi='ant debug install'
+
+alias lcw_p='adb -s 900099e0ec47 logcat | grep -E "Web Console|InAppBrowser|Cordova"'
 
 # common tasks
 alias dev_index='rm index.html; ln -s index_dev.html index.html'
