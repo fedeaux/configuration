@@ -1,3 +1,7 @@
+# cohsa aliases
+alias c_csw='coffee -wc -o js/ .'
+alias c_jw='ruby ~/Work/everywhere/libraries/jsv/jsv.rb --input_dir application/views/cjsv/ --output_dir application/views/'
+
 # git aliases
 alias ga='git add'
 alias gc='git commit -m'
@@ -50,8 +54,11 @@ alias adi='ant debug install'
 alias lcw_p='adb -s 900099e0ec47 logcat | grep -E "Web Console|InAppBrowser|Cordova"'
 
 # common tasks
-alias dev_index='rm index.html; ln -s index_dev.html index.html'
-alias dep_index='rm index.html; ln -s index_dep.html index.html'
+alias dev_index='rm index.html; ln -s dev.html index.html'
+alias dep_index='rm index.html; ln -s dep.html index.html'
+
+# node Webkit
+alias cnw='zip -r app.nw * && nw app.nw'
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
