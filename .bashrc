@@ -22,6 +22,7 @@ alias rb='. ~/.bashrc'
 
 # ssh aliases
 alias ssh_evrm="ssh evrm_admin@ftp.wemoveapp.com"
+alias ssh_i="ssh instrutec2@instrutec.com.br"
 
 # libraries
 alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py' #git update remote
