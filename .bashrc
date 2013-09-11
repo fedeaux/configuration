@@ -28,6 +28,7 @@ alias ssh_i="ssh instrutec2@instrutec.com.br"
 alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py' #git update remote
 alias min_js='ruby ~/Work/everywhere/related/js_minifier.rb'
 alias sls='ruby ~/Work/everywhere/related/logger/logger.rb' #start log server
+alias sis='python artificial_intelligence_implementations/server.py' #start log server
 alias sr2='ruby ~/Desktop/.ffrr.rb'
 alias sr='ruby ~/Desktop/.ffrr-gst.rb'
 
@@ -35,6 +36,7 @@ alias sr='ruby ~/Desktop/.ffrr-gst.rb'
 alias cw='compass watch .'
 alias csw='coffee -wc -o js/ coffee/'
 alias jw='ruby ~/Work/everywhere/related/jsv/coffee_jsv.rb .'
+alias ow='ruby ~/Work/everywhere/libraries/ohl.rb .'
 
 #alias  '
 
