@@ -7,8 +7,8 @@
 (put 'upcase-region 'disabled nil)
 
 (setq x-select-enable-clipboard t)
-(setq interprogram-paste-function
-      'x-cut-buffer-or-selection-value)
+;; (setq interprogram-paste-function
+;;       'x-cut-buffer-or-selection-value)
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
@@ -22,12 +22,15 @@
 ;;(toggle-truncate-lines 1)
 
 ;; Custom Keys
+(global-unset-key (kbd "<f9>"))
 (global-unset-key "\C-Z")
 (global-set-key "\C-Z" 'undo)
 
 (global-set-key "\C-X\C-R" 'replace-string)
-(global-set-key "\C-C\C-C" 'comment-or-uncomment-region)
+(global-set-key "\C-C\C-C" 'comment-region)
 (global-set-key "\C-X\C-L" 'goto-line)
+
+(global-set-key "\C-Q" 'ace-jump-char-mode)
 
 (global-unset-key "\C-X\C-Z")
 
@@ -35,13 +38,13 @@
                          ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa" . "http://melpa.milkbox.net/packages/")))
 
-(defun toggle-fullscreen ()
-  (interactive)
-  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
-	    		 '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
-  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
-	    		 '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
-)
+;; (defun toggle-fullscreen ()
+;;   (interactive)
+;;   (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+;;                       '(2 "_NET_WM_STATE_MAXIMIZED_VERT" 0))
+;;   (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+;;                       '(2 "_NET_WM_STATE_MAXIMIZED_HORZ" 0))
+;; )
 
 ;; AutoComplete
 
@@ -59,8 +62,11 @@
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (add-to-list 'auto-mode-alist '("\\.cjsv\\'" . sass-mode))
+(add-to-list 'auto-mode-alist '("\\.boo\\'" . python-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx\\'" . javascript-mode))
+(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
 
-(toggle-fullscreen)
+;; (toggle-fullscreen)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -100,6 +106,12 @@
 
 (defun common-save-file ()
   (delete-trailing-whitespace)
+  (untabify (point-min) (point-max))
 )
 
-(add-hook 'before-save-hooke 'common-save-file)
+(add-hook 'before-save-hook 'common-save-file)
+
+(custom-set-variables
+ '(initial-frame-alist (quote ((fullscreen . maximized)))))
+
+'(backup-directory-alist (quote (("." . "~/.emacs_backup_files"))))

@@ -1,24 +1,34 @@
 # cohsa aliases
+alias c_jw='ruby ~/Libraries/cjsv/jsv.rb --input_dir application/views/cjsv/ --output_dir application/views/'
 alias c_csw='coffee -wc -o js/ .'
-alias c_jw='ruby ~/Work/everywhere/libraries/jsv/jsv.rb --input_dir application/views/cjsv/ --output_dir application/views/'
+alias cw='compass watch .'
+alias cohsa='ruby ~/Libraries/cohsa/tools/tools.rb'
 
 # git aliases
+alias gc='git commit'
+alias gcm='git commit -m'
+
 alias ga='git add'
-alias gc='git commit -m'
 alias gd='git diff'
 alias gl='git log'
 alias gs='git status'
+alias gx='git checkout'
+
 alias gpom='git push origin master'
+alias gpull='git pull origin master'
+alias glf="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 
 # general aliases
-alias a='ack-grep'
+alias a='ack'
 alias c='clear'
 alias l='ls -la'
-alias o='xdg-open'
+alias o='open'
 alias pag='ps aux | grep'
+alias ip="ifconfig | grep 192"
+alias ff="find . | grep"
 
 alias size='du -sh'
-alias rb='. ~/.bashrc'
+alias rb='. ~/.bash_profile'
 
 # ssh aliases
 alias ssh_evrm="ssh evrm_admin@ftp.wemoveapp.com"
@@ -26,8 +36,9 @@ alias ssh_i="ssh instrutec2@instrutec.com.br"
 
 # libraries
 alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py' #git update remote
-alias min_js='ruby ~/Work/everywhere/related/js_minifier.rb'
-alias sls='ruby ~/Work/everywhere/related/logger/logger.rb' #start log server
+alias min_js='ruby ~/Libraries/js_minifier/js_minifier.rb'
+alias fw='ruby ~/Libraries/frameworker/frameworker.rb'
+alias sls='ruby ~/Libraries/php_logger/logger.rb' #start log server
 alias sis='python artificial_intelligence_implementations/server.py' #start log server
 alias sr2='ruby ~/Desktop/.ffrr.rb'
 alias sr='ruby ~/Desktop/.ffrr-gst.rb'
@@ -35,8 +46,14 @@ alias sr='ruby ~/Desktop/.ffrr-gst.rb'
 # watchers
 alias cw='compass watch .'
 alias csw='coffee -wc -o js/ coffee/'
-alias jw='ruby ~/Work/everywhere/related/jsv/coffee_jsv.rb .'
+alias scsw='ruby ~/Libraries/csw.rb'
+alias jw='ruby ~/Libraries/cjsv/jsv.rb .'
+alias lw='ruby ~/Libraries/latex_watch/latex_watch.rb .'
 alias ow='ruby ~/Work/everywhere/libraries/ohl.rb .'
+
+# rails
+alias rs='rails server'
+alias rc='rails console'
 
 #alias  '
 
@@ -45,14 +62,22 @@ alias ow='ruby ~/Work/everywhere/libraries/ohl.rb .'
 #}
 
 # android export paths
-export PATH=$PATH:~/Libraries/adt-bundle-linux-x86_64-20130522/sdk/tools
-export PATH=$PATH:~/Libraries/adt-bundle-linux-x86_64-20130522/sdk/platform-tools
-export JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64
-export ANDROID_HOME=~/android-sdks/
+export PATH=$PATH:~/Libraries/android-sdk/tools
+export PATH=$PATH:~/Libraries/android-sdk/platform-tools
+export JAVA_HOME=$(/usr/libexec/java_home)
+export ANDROID_HOME=~/Libraries/android-sdk/
+export PATH=$PATH:~/Library/Trigger\ Toolkit/
+
+# php
+export PATH=/usr/local/php5/bin:$PATH
+alias php_c='php ~/Libraries/php_composer/composer.phar'
 
 # android development
 alias lcw='adb logcat | grep -E "Web Console|InAppBrowser|Cordova"'
 alias adi='ant debug install'
+alias cra="cordova run android -d"
+
+alias release_we_move='cp WeMove-release-unsigned.apk WeMove-release-signed.apk && jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/Keys/we_move.keystore WeMove-release-signed.apk we_move_key && zipalign -v 4 WeMove-release-signed.apk WeMove-release-signed-aligned.apk'
 
 alias lcw_p='adb -s 900099e0ec47 logcat | grep -E "Web Console|InAppBrowser|Cordova"'
 
@@ -61,7 +86,11 @@ alias dev_index='rm index.html; ln -s dev.html index.html'
 alias dep_index='rm index.html; ln -s dep.html index.html'
 
 # node Webkit
+export PATH=$PATH:~/Libraries/depot_tools/
 alias cnw='zip -r app.nw * && nw app.nw'
+alias mnw='zip -0 -r app.nw * && nw app.nw' #Node Webkit com zip sem compressão
+alias dnw='zip -0 -r app.nw * && cp app.nw a.app/Contents/Ressources && o a.app'
+alias nw="/Applications/node-webkit.app/Contents/MacOS/node-webkit"
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -112,12 +141,12 @@ esac
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
@@ -177,3 +206,35 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+##
+# Your previous /Users/fedorius/.bash_profile file was backed up as /Users/fedorius/.bash_profile.macports-saved_2013-09-15_at_21:34:39
+##
+
+# MacPorts Installer addition on 2013-09-15_at_21:34:39: adding an appropriate PATH variable for use with MacPorts.
+export PATH=/opt/local/bin:/opt/local/sbin:$PATH
+# Finished adapting your PATH environment variable for use with MacPorts.
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+export PATH=$PATH:/usr/local/mysql/bin
+
+envup() {
+  if [ -f .env ]; then
+    source .env
+    while read var; do
+      if [[ $var != PATH* ]]; then
+        export $var
+      fi
+    done < .env
+    return 0
+  else
+    echo 'No .env file found' 1>&2
+    return 1
+  fi
+}
+
+#export PATH=/Users/fedorius/.rvm/gems/ruby-2.1.0/bin:/Users/fedorius/.rvm/gems/ruby-2.1.0@global/bin:/Users/fedorius/.rvm/rubies/ruby-2.1.0/bin:/opt/local/bin:/opt/local/sbin:/usr/local/php5/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/git/bin:/usr/texbin:/Users/fedorius/Libraries/android-sdk/tools:/Users/fedorius/Libraries/android-sdk/platform-tools:/Users/fedorius/Library/Trigger Toolkit/:/Users/fedorius/Libraries/depot_tools/:/Users/fedorius/.rvm/bin:/usr/local/mysql/bin:/usr/local/mysql/bin
+
+export CFLAGS=-Qunused-arguments
+export CPPFLAGS=-Qunused-arguments
