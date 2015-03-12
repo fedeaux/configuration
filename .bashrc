@@ -1,3 +1,6 @@
+# leanlife
+alias rlls="python ~/Work/leanlife/server/implementation/leanlife/manage.py runserver"
+
 # cohsa aliases
 alias c_jw='ruby ~/Libraries/cjsv/jsv.rb --input_dir application/views/cjsv/ --output_dir application/views/'
 alias c_csw='coffee -wc -o js/ .'
@@ -18,6 +21,18 @@ alias gpom='git push origin master'
 alias gpull='git pull origin master'
 alias glf="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 
+# grunt aliases
+alias g='grunt'
+alias grs='grunt serve'
+alias grw='grunt watch'
+alias grb='grunt build'
+
+# bower aliases
+alias bis="bower install -S"
+
+#tools
+alias udi='ruby ~/Libraries/cohsa/tools/update_dev_index.rb'
+
 # general aliases
 alias a='ack'
 alias c='clear'
@@ -26,6 +41,8 @@ alias o='open'
 alias pag='ps aux | grep'
 alias ip="ifconfig | grep 192"
 alias ff="find . | grep"
+alias fm="find ~/Music | grep"
+alias opf="o ~/Music/_/GP/Tabs/"
 
 alias size='du -sh'
 alias rb='. ~/.bash_profile'
@@ -33,6 +50,10 @@ alias rb='. ~/.bash_profile'
 # ssh aliases
 alias ssh_evrm="ssh evrm_admin@ftp.wemoveapp.com"
 alias ssh_i="ssh instrutec2@instrutec.com.br"
+alias ssh_d="ssh defenestra-lo-ei@defenestra-lo-ei.web731.kinghost.net"
+
+# ngrok
+alias ngrok_ll="ngrok -subdomain leanlife 3000"
 
 # libraries
 alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py' #git update remote
@@ -45,15 +66,63 @@ alias sr='ruby ~/Desktop/.ffrr-gst.rb'
 
 # watchers
 alias cw='compass watch .'
-alias csw='coffee -wc -o js/ coffee/'
+alias csw='coffee -w -b -o -m js/ app/'
 alias scsw='ruby ~/Libraries/csw.rb'
-alias jw='ruby ~/Libraries/cjsv/jsv.rb .'
+alias sscsw='ruby ~/Libraries/scsw.rb'
+alias jw_old='ruby ~/Libraries/cjsv/jsv.rb .'
+alias jw='ruby ~/Libraries/cjsv2/cjsv.rb .'
 alias lw='ruby ~/Libraries/latex_watch/latex_watch.rb .'
 alias ow='ruby ~/Work/everywhere/libraries/ohl.rb .'
 
+# heroku
+alias gphm='git push heroku master'
+alias hr='heroku run'
+
+alias hr_rdm='heroku run rake db:migrate'
+alias hr_rds='heroku run rake db:seed'
+alias hr_rc='heroku run rails console'
+alias hr_rds_f='heroku run rake db:seed:foundation'
+
 # rails
 alias rs='rails server'
+alias rst='rails server --environment=test'
+alias rs1='rails server -p 3001'
 alias rc='rails console'
+alias rdm='rake db:migrate'
+alias rds='rake db:seed'
+alias rds_f='rake db:seed:foundation'
+alias rgmr='rails g migration'
+
+alias rdst='rake db:seed:test RAILS_ENV=test'
+alias rt='rake test'
+
+function rgs_lm(){
+    echo "rails g controller $1 create update destroy --no-helper --no-assets --no-controller-specs --no-view-specs"
+    echo "rails g model $* --no-timestamps"
+    rails g controller $1 create update destroy --no-helper --no-assets --no-controller-specs --no-view-specs
+    rails g model $* --no-timestamps
+}
+
+function rgm(){
+    echo "rails g model $*"
+    rails g model $*
+}
+
+function rgs(){
+    echo "rails g scaffold $* --no-assets --template-engine=haml --no-helper --no-docs --no-ri"
+    rails g scaffold $* --no-assets --template-engine=haml
+}
+
+function rgc(){
+    echo "rails g controller $* --no-ri --no-docs --no-assets --no-helper"
+    rails g controller $* --no-ri --no-docs --no-assets --no-helper
+}
+
+function rgs_d(){
+    echo "rails d scaffold $* --no-assets --template-engine=haml"
+    rails d scaffold $* --no-assets --template-engine=haml
+}
+
 
 #alias  '
 
@@ -73,9 +142,10 @@ export PATH=/usr/local/php5/bin:$PATH
 alias php_c='php ~/Libraries/php_composer/composer.phar'
 
 # android development
-alias lcw='adb logcat | grep -E "Web Console|InAppBrowser|Cordova"'
+alias lcw='adb logcat | grep -E "Web Console|InAppBrowser|cordova"'
 alias adi='ant debug install'
-alias cra="cordova run android -d"
+alias cra="cordova run android"
+alias cri="cordova run ios"
 
 alias release_we_move='cp WeMove-release-unsigned.apk WeMove-release-signed.apk && jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/Keys/we_move.keystore WeMove-release-signed.apk we_move_key && zipalign -v 4 WeMove-release-signed.apk WeMove-release-signed-aligned.apk'
 

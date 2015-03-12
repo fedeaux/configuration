@@ -29,6 +29,7 @@
 (global-set-key "\C-X\C-R" 'replace-string)
 (global-set-key "\C-C\C-C" 'comment-region)
 (global-set-key "\C-X\C-L" 'goto-line)
+(global-set-key "\C-C\C-S" 'sort-lines)
 
 (global-set-key "\C-Q" 'ace-jump-char-mode)
 
@@ -61,10 +62,16 @@
 (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
-(add-to-list 'auto-mode-alist '("\\.cjsv\\'" . sass-mode))
+(add-to-list 'auto-mode-alist '("\\.cjsv\\'" . haml-mode))
 (add-to-list 'auto-mode-alist '("\\.boo\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . javascript-mode))
-(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rake\\'" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.jbuilder\\'" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rabl\\'" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.scss\\'" . sass-mode))
+
+(add-hook 'enh-ruby-mode-hook 'robe-mode)
 
 ;; (toggle-fullscreen)
 (custom-set-variables
@@ -74,6 +81,9 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(custom-enabled-themes (quote (manoj-dark))))
+
+(custom-set-variables '(coffee-tab-width 2))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -81,12 +91,13 @@
  ;; If there is more than one, they won't work right.
  )
 
-(setq tab-width 2
-      indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (require 'auto-complete-config)
 (ac-config-default)
+(setq ac-ignore-case nil)
 
 ;; Hooks
 (defun coffee-custom ()
@@ -99,19 +110,63 @@
 
 (defun common-find-file ()
   (auto-complete-mode)
-  (flex-autopair-mode)
 )
 
 (add-hook 'find-file-hook 'common-find-file)
+
+(require 'smartparens-config)
+(require 'smartparens-ruby)
+(smartparens-global-mode)
+(show-smartparens-global-mode t)
+(sp-with-modes '(rhtml-mode)
+  (sp-local-pair "<" ">")
+  (sp-local-pair "<%" "%>"))
+
+(textmate-mode)
 
 (defun common-save-file ()
   (delete-trailing-whitespace)
   (untabify (point-min) (point-max))
 )
 
+(defun backward-delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point)))
+)
+
+(global-set-key "\M-\d" 'backward-delete-word)
+
 (add-hook 'before-save-hook 'common-save-file)
 
 (custom-set-variables
  '(initial-frame-alist (quote ((fullscreen . maximized)))))
 
-'(backup-directory-alist (quote (("." . "~/.emacs_backup_files"))))
+(setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+(setq auto-save-default nil)
+
+    ;; If the *scratch* buffer is killed, recreate it automatically
+    ;; FROM: Morten Welind
+    ;;http://www.geocrawler.com/archives/3/338/1994/6/0/1877802/
+(save-excursion
+  (set-buffer (get-buffer-create "*scratch*"))
+  (lisp-interaction-mode)
+  (make-local-variable 'kill-buffer-query-functions)
+  (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer))
+
+(defun kill-scratch-buffer ()
+  ;; The next line is just in case someone calls this manually
+  (set-buffer (get-buffer-create "*scratch*"))
+  ;; Kill the current (*scratch*) buffer
+  (remove-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
+  (kill-buffer (current-buffer))
+  ;; Make a brand new *scratch* buffer
+  (set-buffer (get-buffer-create "*scratch*"))
+  (lisp-interaction-mode)
+  (make-local-variable 'kill-buffer-query-functions)
+  (add-hook 'kill-buffer-query-functions 'kill-scratch-buffer)
+  ;; Since we killed it, don't let caller do that.
+  nil)
+
+(setq js-indent-level 2)
