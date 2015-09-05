@@ -1,5 +1,5 @@
 # leanlife
-alias rlls="python ~/Work/leanlife/server/implementation/leanlife/manage.py runserver"
+alias rlls="python ~/Work/leanlife/legacy_server/implementation/leanlife/manage.py runserver"
 
 # cohsa aliases
 alias c_jw='ruby ~/Libraries/cjsv/jsv.rb --input_dir application/views/cjsv/ --output_dir application/views/'
@@ -16,6 +16,8 @@ alias gd='git diff'
 alias gl='git log'
 alias gs='git status'
 alias gx='git checkout'
+alias gb='git branch'
+alias gxb='git checkout -b'
 
 alias gpom='git push origin master'
 alias gpull='git pull origin master'
@@ -24,7 +26,7 @@ alias glf="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset 
 # grunt aliases
 alias g='grunt'
 alias grs='grunt serve'
-alias grw='grunt watch'
+alias grw='g && grunt watch'
 alias grb='grunt build'
 
 # bower aliases
@@ -43,6 +45,7 @@ alias ip="ifconfig | grep 192"
 alias ff="find . | grep"
 alias fm="find ~/Music | grep"
 alias opf="o ~/Music/_/GP/Tabs/"
+alias dv="viddl-rb"
 
 alias size='du -sh'
 alias rb='. ~/.bash_profile'
@@ -51,6 +54,8 @@ alias rb='. ~/.bash_profile'
 alias ssh_evrm="ssh evrm_admin@ftp.wemoveapp.com"
 alias ssh_i="ssh instrutec2@instrutec.com.br"
 alias ssh_d="ssh defenestra-lo-ei@defenestra-lo-ei.web731.kinghost.net"
+alias ssh_lll="ssh -i ~/.ssh/keys/leanlife-prod.pem ubuntu@backend.leanlife.com.br"
+alias ssh_ll="ssh root@45.55.252.173"
 
 # ngrok
 alias ngrok_ll="ngrok -subdomain leanlife 3000"
@@ -95,6 +100,10 @@ alias rgmr='rails g migration'
 
 alias rdst='rake db:seed:test RAILS_ENV=test'
 alias rt='rake test'
+alias t='c && rspec'
+
+# steroids
+alias sc='steroids connect'
 
 function rgs_lm(){
     echo "rails g controller $1 create update destroy --no-helper --no-assets --no-controller-specs --no-view-specs"
@@ -131,11 +140,17 @@ function rgs_d(){
 #}
 
 # android export paths
-export PATH=$PATH:~/Libraries/android-sdk/tools
-export PATH=$PATH:~/Libraries/android-sdk/platform-tools
+# export PATH=$PATH:~/Libraries/android-sdk/tools
+# export PATH=$PATH:~/Libraries/android-sdk/platform-tools
+# export ANDROID_HOME=~/Libraries/android-sdk/
+
+export PATH=$PATH:/Users/fedorius/.rubymotion-android/sdk/tools
+export PATH=$PATH:/Users/fedorius/.rubymotion-android/sdk/platform-tools
+export ANDROID_HOME=~/.rubymotion-android/sdk/
 export JAVA_HOME=$(/usr/libexec/java_home)
-export ANDROID_HOME=~/Libraries/android-sdk/
 export PATH=$PATH:~/Library/Trigger\ Toolkit/
+export RUBYMOTION_ANDROID_NDK=/Users/fedorius/.rubymotion-android/ndk
+export RUBYMOTION_ANDROID_SDK=/Users/fedorius/.rubymotion-android/sdk
 
 # php
 export PATH=/usr/local/php5/bin:$PATH
@@ -143,6 +158,7 @@ alias php_c='php ~/Libraries/php_composer/composer.phar'
 
 # android development
 alias lcw='adb logcat | grep -E "Web Console|InAppBrowser|cordova"'
+alias cl='~/.rubymotion-android/sdk/platform-tools/adb logcat console.log:D \*:S'
 alias adi='ant debug install'
 alias cra="cordova run android"
 alias cri="cordova run ios"
@@ -161,6 +177,13 @@ alias cnw='zip -r app.nw * && nw app.nw'
 alias mnw='zip -0 -r app.nw * && nw app.nw' #Node Webkit com zip sem compressão
 alias dnw='zip -0 -r app.nw * && cp app.nw a.app/Contents/Ressources && o a.app'
 alias nw="/Applications/node-webkit.app/Contents/MacOS/node-webkit"
+
+source ~/.nvm/nvm.sh
+
+# cocos
+alias ccra='cocos run -p android'
+alias ccri='cocos run -p ios'
+alias ccrw='cocos run -p web'
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -308,3 +331,25 @@ envup() {
 
 export CFLAGS=-Qunused-arguments
 export CPPFLAGS=-Qunused-arguments
+
+# Add environment variable COCOS_CONSOLE_ROOT for cocos2d-x
+export COCOS_CONSOLE_ROOT=/Users/fedorius/Libraries/cocos2d-js-v3.6.1/tools/cocos2d-console/bin
+export PATH=$COCOS_CONSOLE_ROOT:$PATH
+
+# Add environment variable NDK_ROOT for cocos2d-x
+export NDK_ROOT=/Users/fedorius/.rubymotion-android/ndk
+export PATH=$NDK_ROOT:$PATH
+
+# Add environment variable ANDROID_SDK_ROOT for cocos2d-x
+export ANDROID_SDK_ROOT=/Users/fedorius/.rubymotion-android/sdk
+export PATH=$ANDROID_SDK_ROOT:$PATH
+export PATH=$ANDROID_SDK_ROOT/tools:$ANDROID_SDK_ROOT/platform-tools:$PATH
+
+# Add environment variable ANT_ROOT for cocos2d-x
+export ANT_ROOT=/usr/local/bin
+export PATH=$ANT_ROOT:$PATH
+
+# Marmalade SDK addition: please do not edit these lines
+export PATH=$PATH:"/Applications/Marmalade.app/Contents/s3e/bin"
+export S3E_DIR=/Applications/Marmalade.app/Contents/s3e
+# Marmalade SDK addition: end

@@ -35,9 +35,11 @@
 
 (global-unset-key "\C-X\C-Z")
 
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+(setq package-archives '(
+                         ;; ("gnu" . "http://elpa.gnu.org/packages/")
+                         ;; ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ;; ("melpa" . "http://melpa.milkbox.net/packages/")
+                         ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
 
 ;; (defun toggle-fullscreen ()
 ;;   (interactive)
@@ -107,6 +109,9 @@
 )
 
 (add-hook 'coffee-mode-hook 'coffee-custom)
+
+(require 'android-mode)
+(custom-set-variables '(android-mode-sdk-dir "~/.rubymotion-android/sdk"))
 
 (defun common-find-file ()
   (auto-complete-mode)

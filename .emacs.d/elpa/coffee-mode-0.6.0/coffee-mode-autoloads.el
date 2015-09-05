@@ -3,8 +3,8 @@
 ;;; Code:
 
 
-;;;### (autoloads (coffee-mode) "coffee-mode" "coffee-mode.el" (20938
-;;;;;;  12067))
+;;;### (autoloads (coffee-mode) "coffee-mode" "coffee-mode.el" (21939
+;;;;;;  43417 0 0))
 ;;; Generated autoloads from coffee-mode.el
 
 (autoload 'coffee-mode "coffee-mode" "\
@@ -18,11 +18,14 @@ Major mode for editing CoffeeScript.
 
 (add-to-list 'auto-mode-alist '("Cakefile\\'" . coffee-mode))
 
+(add-to-list 'auto-mode-alist '("\\.cson\\'" . coffee-mode))
+
 (add-to-list 'interpreter-mode-alist '("coffee" . coffee-mode))
 
 ;;;***
 
-;;;### (autoloads nil nil ("coffee-mode-pkg.el") (20938 12068 13319))
+;;;### (autoloads nil nil ("coffee-mode-pkg.el") (21939 43417 431458
+;;;;;;  0))
 
 ;;;***
 
