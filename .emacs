@@ -67,13 +67,12 @@
 (add-to-list 'auto-mode-alist '("\\.cjsv\\'" . haml-mode))
 (add-to-list 'auto-mode-alist '("\\.boo\\'" . python-mode))
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . javascript-mode))
-(add-to-list 'auto-mode-alist '("Gemfile" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rake\\'" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.jbuilder\\'" . enh-ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.rabl\\'" . enh-ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rake\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.jbuilder\\'" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.rabl\\'" . ruby-mode))
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . sass-mode))
-
-(add-hook 'enh-ruby-mode-hook 'robe-mode)
+(add-to-list 'auto-mode-alist '("\\.sass\\'" . sass-mode))
 
 ;; (toggle-fullscreen)
 (custom-set-variables
@@ -100,6 +99,12 @@
 (require 'auto-complete-config)
 (ac-config-default)
 (setq ac-ignore-case nil)
+(global-auto-complete-mode t)
+
+(defun configure-auto-complete-for-sass ()
+  (add-to-list 'ac-sources 'ac-source-css-property))
+(add-hook 'sass-mode-hook 'configure-auto-complete-for-sass)
+(add-to-list 'ac-modes 'sass-mode)
 
 ;; Hooks
 (defun coffee-custom ()
@@ -151,9 +156,9 @@ With argument ARG, do this that many times."
 (setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
 (setq auto-save-default nil)
 
-    ;; If the *scratch* buffer is killed, recreate it automatically
-    ;; FROM: Morten Welind
-    ;;http://www.geocrawler.com/archives/3/338/1994/6/0/1877802/
+;; If the *scratch* buffer is killed, recreate it automatically
+;; FROM: Morten Welind
+;;http://www.geocrawler.com/archives/3/338/1994/6/0/1877802/
 (save-excursion
   (set-buffer (get-buffer-create "*scratch*"))
   (lisp-interaction-mode)

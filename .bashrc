@@ -1,5 +1,11 @@
-# leanlife
-alias rlls="python ~/Work/leanlife/legacy_server/implementation/leanlife/manage.py runserver"
+function ll_kiu(){
+    git stash
+    git checkout master
+    git pull origin master
+    git checkout builder
+    git rebase master
+    git stash pop
+}
 
 # cohsa aliases
 alias c_jw='ruby ~/Libraries/cjsv/jsv.rb --input_dir application/views/cjsv/ --output_dir application/views/'
@@ -10,18 +16,21 @@ alias cohsa='ruby ~/Libraries/cohsa/tools/tools.rb'
 # git aliases
 alias gc='git commit'
 alias gcm='git commit -m'
+alias grm='git rebase master'
 
 alias ga='git add'
 alias gd='git diff'
-alias gl='git log'
 alias gs='git status'
 alias gx='git checkout'
 alias gb='git branch'
 alias gxb='git checkout -b'
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+
+alias gops='git commit --all --amend --no-edit'
 
 alias gpom='git push origin master'
 alias gpull='git pull origin master'
-alias glf="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+alias gundo='git reset --soft HEAD~   '
 
 # grunt aliases
 alias g='grunt'
@@ -49,16 +58,18 @@ alias dv="viddl-rb"
 
 alias size='du -sh'
 alias rb='. ~/.bash_profile'
+alias new_fire='/Applications/Firefox.app/Contents/MacOS/firefox -no-remote -ProfileManager'
 
 # ssh aliases
 alias ssh_evrm="ssh evrm_admin@ftp.wemoveapp.com"
 alias ssh_i="ssh instrutec2@instrutec.com.br"
 alias ssh_d="ssh defenestra-lo-ei@defenestra-lo-ei.web731.kinghost.net"
 alias ssh_lll="ssh -i ~/.ssh/keys/leanlife-prod.pem ubuntu@backend.leanlife.com.br"
+alias ssh_llp="ssh -i ~/.ssh/keys/leanlife-public-aws-key-2.pem ec2-user@ec2-54-232-241-212.sa-east-1.compute.amazonaws.com"
 alias ssh_ll="ssh root@45.55.252.173"
 
 # ngrok
-alias ngrok_ll="ngrok -subdomain leanlife 3000"
+alias ngrok_l="ngrok -subdomain freela 3000"
 
 # libraries
 alias gur='python ~/Work/everywhere/related/gur/git_update_remote.py' #git update remote
@@ -91,19 +102,48 @@ alias hr_rds_f='heroku run rake db:seed:foundation'
 # rails
 alias rs='rails server'
 alias rst='rails server --environment=test'
-alias rs1='rails server -p 3001'
 alias rc='rails console'
 alias rdm='rake db:migrate'
 alias rds='rake db:seed'
 alias rds_f='rake db:seed:foundation'
+alias rds_ft='rake db:seed:foundation RAILS_ENV=test'
 alias rgmr='rails g migration'
 
 alias rdst='rake db:seed:test RAILS_ENV=test'
 alias rt='rake test'
 alias t='c && rspec'
 
+alias rs1='rails server -p 3001'
+alias rs2='rails server -p 3002'
+alias rs3='rails server -p 3003'
+alias rs4='rails server -p 3004'
+alias rs5='rails server -p 3005'
+
 # steroids
 alias sc='steroids connect'
+
+# Brain Damage
+alias rgbw='ruby lib/generators/brain_damage/lib/watcher.rb'
+
+function rgbr(){
+    c
+#    ruby lib/ruby/devise_guard.rb do
+    resources=$(echo $1 | tr "," "\n")
+    for resource in $resources
+    do
+        echo "rails g brain_damage:resource -d=$resource"
+        rails g brain_damage:resource -d=$resource
+    done
+#    ruby lib/ruby/devise_guard.rb undo
+}
+
+function rgbf(){
+    c
+#    ruby lib/ruby/devise_guard.rb do
+    echo "rails g brain_damage:full"
+    rails g brain_damage:full
+#    ruby lib/ruby/devise_guard.rb undo
+}
 
 function rgs_lm(){
     echo "rails g controller $1 create update destroy --no-helper --no-assets --no-controller-specs --no-view-specs"
@@ -160,8 +200,8 @@ alias php_c='php ~/Libraries/php_composer/composer.phar'
 alias lcw='adb logcat | grep -E "Web Console|InAppBrowser|cordova"'
 alias cl='~/.rubymotion-android/sdk/platform-tools/adb logcat console.log:D \*:S'
 alias adi='ant debug install'
-alias cra="cordova run android"
-alias cri="cordova run ios"
+alias cdra="cordova run android"
+alias cdri="cordova run ios"
 
 alias release_we_move='cp WeMove-release-unsigned.apk WeMove-release-signed.apk && jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ~/Keys/we_move.keystore WeMove-release-signed.apk we_move_key && zipalign -v 4 WeMove-release-signed.apk WeMove-release-signed-aligned.apk'
 
@@ -181,9 +221,9 @@ alias nw="/Applications/node-webkit.app/Contents/MacOS/node-webkit"
 source ~/.nvm/nvm.sh
 
 # cocos
-alias ccra='cocos run -p android'
-alias ccri='cocos run -p ios'
-alias ccrw='cocos run -p web'
+alias cra='cocos run -p android'
+alias cri='cocos run -p ios'
+alias crw='cocos run -p web'
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
@@ -333,7 +373,7 @@ export CFLAGS=-Qunused-arguments
 export CPPFLAGS=-Qunused-arguments
 
 # Add environment variable COCOS_CONSOLE_ROOT for cocos2d-x
-export COCOS_CONSOLE_ROOT=/Users/fedorius/Libraries/cocos2d-js-v3.6.1/tools/cocos2d-console/bin
+export COCOS_CONSOLE_ROOT=/Users/fedorius/Libraries/cocos2d-x-3.8/tools/cocos2d-console/bin
 export PATH=$COCOS_CONSOLE_ROOT:$PATH
 
 # Add environment variable NDK_ROOT for cocos2d-x
@@ -353,3 +393,10 @@ export PATH=$ANT_ROOT:$PATH
 export PATH=$PATH:"/Applications/Marmalade.app/Contents/s3e/bin"
 export S3E_DIR=/Applications/Marmalade.app/Contents/s3e
 # Marmalade SDK addition: end
+
+# Add environment variable COCOS_TEMPLATES_ROOT for cocos2d-x
+export COCOS_TEMPLATES_ROOT=/Users/fedorius/Libraries/cocos2d-x-3.8/templates
+export PATH=$COCOS_TEMPLATES_ROOT:$PATH
+
+# Spotify
+export PATH=/Users/fedorius/Work/open-source/shpotify:$PATH
