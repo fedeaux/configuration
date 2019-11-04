@@ -1,0 +1,133 @@
+# git aliases
+# common
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gm='git merge --no-ff'
+alias ga='git add'
+alias gd='git diff'
+alias gs='git status'
+
+alias gx='git checkout'
+alias gxd='git checkout develop'
+alias gxm='git checkout master'
+alias gxb='git checkout -b'
+
+alias gb='git branch'
+alias gbm='git branch -m'
+alias gbd='git branch -d'
+alias gbD='git branch -D'
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+
+alias gr='git rebase'
+alias grd='git rebase develop'
+alias grm='git rebase master'
+alias grc='git rebase --continue'
+alias grs='git rebase --skip'
+alias gra='git rebase --abort'
+
+# tags
+alias gt='git tag -a'
+alias gtd='git tag -d'
+alias gpot='git push origin --tags'
+
+# complex
+alias gops='git commit --amend --no-edit'
+alias gundo='git reset --soft HEAD~'
+alias grh='git reset HEAD'
+alias gdont='ga . && gops && gpo -f'
+
+alias gpo='git push origin HEAD'
+alias gpom='git push origin master'
+alias gpl='git pull origin'
+alias gplm='git pull origin master'
+alias gpld='git pull origin develop'
+alias git_vai='ga . && gops && gpo -f'
+
+# Capistrano
+alias cpd='cap production deploy'
+alias cpdr='cap production deploy:restart'
+alias cpsr='cap production sidekiq:restart'
+alias cpss='cap production sidekiq:stop'
+
+# general aliases
+alias a='c && ack'
+alias s='c && ack -Q'
+alias c='clear'
+alias l='ls -la'
+alias o='open'
+alias pag='ps aux | grep'
+alias ip="ifconfig | grep 192"
+alias ff="find . | grep"
+alias fm="find ~/Music | grep"
+alias opf="o ~/Music/_/GP/Tabs/"
+alias dv="viddl-rb"
+
+alias size='du -sh'
+alias rb='. ~/.zshrc'
+alias new_fire='/Applications/Firefox.app/Contents/MacOS/firefox -no-remote -ProfileManager > /dev/null'
+
+function gsub(){
+    s $1 -l $3 | xargs sed -i '' s/$1/$2/g
+}
+
+function fix_pg(){
+    rm /usr/local/var/postgres/postmaster.pid
+    launchctl unload homebrew.mxcl.postgresql.plist
+    launchctl load -w homebrew.mxcl.postgresql.plist
+}
+
+# heroku
+alias gphm='git push heroku master'
+alias gpsm='git push staging master'
+alias hr='heroku run'
+
+alias hr_rdm='heroku run rake db:migrate'
+alias hr_rds='heroku run rake db:seed'
+alias hr_rc='heroku run rails console'
+alias hr_rds_f='heroku run rake db:seed:foundation'
+alias hr_b='heroku run bash'
+
+# rails
+alias rst='rails server --environment=test'
+alias rc='rails console'
+alias rdm='rake db:migrate && rake db:migrate RAILS_ENV=test'
+alias rdr='rake db:rollback && rake db:rollback RAILS_ENV=test'
+alias rds='rake db:seed'
+alias rgmr='rails g migration'
+alias rgdm='rails g data_migration'
+alias rbi='rake bower:install'
+alias rr='rubocop -a --display-cop-names'
+alias rjw='rake jobs:work'
+alias rjwo='rake jobs:workoff'
+alias rjc='rake jobs:clear'
+alias yibw='yarn install && ./bin/webpack-dev-server'
+alias bes='bundle exec sidekiq'
+alias wpnd='wp && ga . && gcm wp && gpo && cpd'
+
+alias t='c && rspec'
+alias tc='c && rspec --order defined --format documentation'
+alias ct='c && cucumber'
+alias tuf='t spec/models spec/requests spec/jobs spec/services spec/controllers'
+
+alias rs='rails server'
+alias rs1='rails server -p 3001'
+alias rs2='rails server -p 3002'
+alias rs3='rails server -p 3003'
+alias rs4='rails server -p 3004'
+alias rs5='rails server -p 3005'
+
+alias rpp='rake parallel:prepare'
+alias pt='c && rake parallel:spec'
+alias fs='bundle exec foreman start'
+alias dcu='docker-compose up'
+
+function rgm(){
+    echo "rails g model $*"
+    rails g model $*
+}
+
+alias rake='noglob rake'
+
+# NGrok
+alias nrgrok='ngrok http 3000 --subdomain=naradio'
+alias ggrok='ngrok http 3000 --subdomain=getaway'
