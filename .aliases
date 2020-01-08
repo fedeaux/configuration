@@ -79,6 +79,7 @@ function fix_pg(){
 # heroku
 alias gphm='git push heroku master'
 alias gpsm='git push staging master'
+alias gpall='gpo && gphm'
 alias hr='heroku run'
 
 alias hr_rdm='heroku run rake db:migrate'
@@ -105,7 +106,7 @@ alias bes='bundle exec sidekiq'
 alias wpnd='wp && ga . && gcm wp && gpo && cpd'
 
 alias t='c && rspec'
-alias tc='c && rspec --order defined --format documentation'
+alias td='c && rspec --order defined --format documentation'
 alias ct='c && cucumber'
 alias tuf='t spec/models spec/requests spec/jobs spec/services spec/controllers'
 
@@ -120,6 +121,9 @@ alias rpp='rake parallel:prepare'
 alias pt='c && rake parallel:spec'
 alias fs='bundle exec foreman start'
 alias dcu='docker-compose up'
+alias rdd='rake dev:deploy'
+
+# runa
 
 function rgm(){
     echo "rails g model $*"
@@ -128,6 +132,13 @@ function rgm(){
 
 alias rake='noglob rake'
 
+# node
+alias yrd='yarn run dev'
+
 # NGrok
+alias mgrok='ngrok http 3000 --subdomain=fedeaux'
 alias nrgrok='ngrok http 3000 --subdomain=naradio'
 alias ggrok='ngrok http 3000 --subdomain=getaway'
+
+# other
+alias rfa='redis-cli flushall'

@@ -31,24 +31,22 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ruby
-     ivy
+     (ruby :variables ruby-version-manager 'rvm)
      auto-completion
      better-defaults
-     emacs-lisp
-     markdown
-     syntax-checking
-     go
      csv
-     html
      emacs-lisp
-     javascript
+     go
      html
-     sql
-     yaml
+     ivy
+     javascript
+     markdown
      react
-     vue
      sass
+     sql
+     syntax-checking
+     vue
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -333,6 +331,9 @@ you should place your code here."
   (require 'vue-mode)
   (add-to-list 'vue-mode-hook #'smartparens-mode)
   (add-to-list 'vue-mode-hook #'auto-complete-mode)
+  (add-to-list 'coffee-mode-hook #'auto-complete-mode)
+
+  (load-file "~/Work/my/krl-mode/krl-mode.el")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -342,6 +343,7 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+
  '(flycheck-checker-error-threshold 99999)
  '(package-selected-packages
    (quote
