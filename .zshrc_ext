@@ -1,4 +1,4 @@
-plugins=(rails ruby git)
+plugins=(ruby git)
 
 bindkey "126" up-line-or-local-history
 bindkey "125" down-line-or-local-history

@@ -25,6 +25,9 @@ alias grc='git rebase --continue'
 alias grs='git rebase --skip'
 alias gra='git rebase --abort'
 
+alias gst='git stash'
+alias gstp='git stash pop'
+
 # tags
 alias gt='git tag -a'
 alias gtd='git tag -d'
@@ -40,7 +43,7 @@ alias gpo='git push origin HEAD'
 alias gpom='git push origin master'
 alias gpl='git pull origin'
 alias gplm='git pull origin master'
-alias gpld='git pull origin develop'
+alias gpld='git pull origin development'
 alias git_vai='ga . && gops && gpo -f'
 
 # Capistrano
@@ -123,8 +126,6 @@ alias fs='bundle exec foreman start'
 alias dcu='docker-compose up'
 alias rdd='rake dev:deploy'
 
-# runa
-
 function rgm(){
     echo "rails g model $*"
     rails g model $*
@@ -142,3 +143,6 @@ alias ggrok='ngrok http 3000 --subdomain=getaway'
 
 # other
 alias rfa='redis-cli flushall'
+
+# runa
+alias wfr='python3 ~/configuration/iterm.py'
