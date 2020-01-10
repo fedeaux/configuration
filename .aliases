@@ -145,4 +145,4 @@ alias ggrok='ngrok http 3000 --subdomain=getaway'
 alias rfa='redis-cli flushall'
 
 # runa
-alias wfr='python3 ~/configuration/iterm.py'
+alias wrb='python3 ~/configuration/iterm.py'
