@@ -1,3 +1,6 @@
+# emacs
+alias oe='open -a Emacs'
+
 # git aliases
 # common
 alias gc='git commit'
@@ -94,8 +97,8 @@ alias hr_b='heroku run bash'
 # rails
 alias rst='rails server --environment=test'
 alias rc='rails console'
-alias rdm='rake db:migrate && rake db:migrate RAILS_ENV=test'
-alias rdr='rake db:rollback && rake db:rollback RAILS_ENV=test'
+alias rdm='rake db:migrate'
+alias rdr='rake db:rollback'
 alias rds='rake db:seed'
 alias rgmr='rails g migration'
 alias rgdm='rails g data_migration'
@@ -145,4 +148,8 @@ alias ggrok='ngrok http 3000 --subdomain=getaway'
 alias rfa='redis-cli flushall'
 
 # runa
-alias wrb='python3 ~/configuration/iterm.py'
+alias wr='python3 ~/configuration/terminal_setuper/runa.py'
+alias wb='python3 ~/configuration/terminal_setuper/birl.py'
+
+# commands
+alias kg='ruby ~/configuration/commands/kill_ghost_processes.rb'

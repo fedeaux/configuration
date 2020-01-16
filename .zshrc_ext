@@ -17,3 +17,5 @@ down-line-or-local-history() {
 zle -N down-line-or-local-history
 
 source /Users/fedorius/configuration/.aliases
+
+export EDITOR="emacsclient"
