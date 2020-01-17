@@ -313,24 +313,30 @@ you should place your code here."
   (setq ruby-insert-encoding-magic-comment nil)
   (setq mmm-submode-decoration-level 0)
 
-  ; Custom Keys
-  (global-unset-key (kbd "<f9>"))
-  (global-unset-key "\C-Z")
-  (global-set-key "\C-Z" 'undo)
-  (global-set-key "\C-X\C-R" 'replace-string)
-  (global-set-key "\C-C\C-C" 'comment-region)
-  (global-set-key "\C-C\C-U" 'uncomment-region)
-  (global-set-key "\C-X\C-L" 'goto-line)
-  (global-set-key "\C-C\C-S" 'sort-lines)
-  (global-set-key "\C-X\C-Y" 'yas-insert-snippet)
+  (add-to-list 'auto-mode-alist '("\\.aliases\\'" . sh-mode))
+  (add-to-list 'auto-mode-alist '("\\.zshrc_ext\\'" . sh-mode))
 
+  ; Hooks
   (defun common-save-file ()
     (delete-trailing-whitespace)
     (untabify (point-min) (point-max))
     )
 
-  ; Hooks
   (add-hook 'before-save-hook 'common-save-file)
+
+  (defun set-custom-keys ()
+    (local-unset-key (kbd "<f9>"))
+    (local-unset-key "\C-Z")
+    (local-set-key "\C-Z" 'undo)
+    (local-set-key "\C-X\C-R" 'replace-string)
+    (local-set-key "\C-C\C-C" 'comment-region)
+    (local-set-key "\C-C\C-U" 'uncomment-region)
+    (local-set-key "\C-X\C-L" 'goto-line)
+    (local-set-key "\C-C\C-S" 'sort-lines)
+    (local-set-key "\C-X\C-Y" 'yas-insert-snippet)
+    )
+
+  (add-hook 'after-change-major-mode-hook 'set-custom-keys)
 
   (require 'vue-mode)
   (add-to-list 'vue-mode-hook #'smartparens-mode)
