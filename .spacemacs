@@ -31,7 +31,6 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     python
      auto-completion
      better-defaults
      csv
@@ -40,7 +39,9 @@ values."
      html
      ivy
      javascript
+     lsp
      markdown
+     python
      react
      ruby
      sql
@@ -307,6 +308,8 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+  ;; (require 'solargraph)
+
   (delete-selection-mode t)
   (setq c-basic-offset 2)
   (setq yas-snippet-dirs '("~/.emacs.d/private/snippets/"))
@@ -316,13 +319,16 @@ you should place your code here."
   (add-to-list 'auto-mode-alist '("\\.aliases\\'" . sh-mode))
   (add-to-list 'auto-mode-alist '("\\.zshrc_ext\\'" . sh-mode))
 
-  ; Hooks
+  ; Custom Functions
+  (defun reload-custom ()
+    (interactive)
+    (load "~/configuration/custom.el")
+    )
+
   (defun common-save-file ()
     (delete-trailing-whitespace)
     (untabify (point-min) (point-max))
     )
-
-  (add-hook 'before-save-hook 'common-save-file)
 
   (defun set-custom-keys ()
     (local-unset-key (kbd "<f9>"))
@@ -334,8 +340,13 @@ you should place your code here."
     (local-set-key "\C-X\C-L" 'goto-line)
     (local-set-key "\C-C\C-S" 'sort-lines)
     (local-set-key "\C-X\C-Y" 'yas-insert-snippet)
+    (local-set-key "\C-X\C-Y" 'yas-insert-snippet)
+    (local-set-key "\C-L" 'reload-custom)
+    ;; (oi)
     )
 
+  ; Hooks
+  (add-hook 'before-save-hook 'common-save-file)
   (add-hook 'after-change-major-mode-hook 'set-custom-keys)
 
   (require 'vue-mode)
