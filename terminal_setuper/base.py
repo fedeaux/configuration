@@ -14,7 +14,7 @@ import AppKit
 import asyncio
 from git import Repo
 
-class RunaTerminalSetuper:
+class TerminalSetuper:
     def __init__(self):
         self.api = { 'path': '~/Work/runa/api', 'dev_branch': 'development', 'cded': False }
         self.spa = { 'path': '~/Work/runa/spa', 'dev_branch': 'develop', 'cded': False }

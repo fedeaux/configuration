@@ -1,0 +1,31 @@
+export RUNA_BRANCH_1=feature/payroll-6-prevent-multiple-stamping
+export RUNA_BRANCH_2=
+export RUNA_BRANCH_3=
+
+export RUNA_RA=runahr-api-br-feature-payroll
+export RUNA_RA2=runahr-api-dev-pr-2153
+export RUNA_CRA=$RUNA_RA
+
+# Heroku
+alias rhr='heroku run --app=$RUNA_CRA'
+alias rhrdr='heroku run rake db:rollback --app=$RUNA_CRA'
+alias rhrdm='heroku run rake db:migrate --app=$RUNA_CRA'
+alias rhrds='heroku run rake db:seed --app=$RUNA_CRA'
+alias rhrc='heroku run rails console --app=$RUNA_CRA'
+alias rhb='heroku run bash --app=$RUNA_CRA'
+alias rhl='heroku logs --app=$RUNA_CRA'
+alias rhcb='rm latest.dump && heroku pg:backups:capture --app=$RUNA_CRA && heroku pg:backups:download --app=$RUNA_CRA'
+alias rora='o https://dashboard.heroku.com/apps/$RUNA_CRA'
+
+alias gad='git apply hcrx/dev.patch'
+
+alias gxb1='git checkout $RUNA_BRANCH_1'
+alias gxb2='git checkout $RUNA_BRANCH_2'
+alias gxb3='git checkout $RUNA_BRANCH_3'
+
+alias grb1='git rebase $RUNA_BRANCH_1'
+alias grb2='git rebase $RUNA_BRANCH_2'
+alias grb3='git rebase $RUNA_BRANCH_3'
+
+# Helpers
+alias rdb='rake db:reset && rm db/schema.rb && rake db:migrate && rake db:seed && rake db:seed:demo SEED_REGION_KEY="MEX" SEED_COMPANY_NAME="ACME" SEED_SUBDOMAIN="acme"'

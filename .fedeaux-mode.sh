@@ -1,5 +1,5 @@
 # emacs
-alias oe='open -a Emacs'
+alias fdx_fm='ruby ~/Work/runa/api/hcrx/folder_manipulator.rb'
 
 # git aliases
 # common
@@ -78,6 +78,8 @@ alias l='ls -la'
 alias o='open'
 alias pag='ps aux | grep'
 alias ip="ifconfig | grep 192"
+alias ff="find . | grep"
+alias fm="find ~/Music | grep"
 alias opf="o ~/Music/_/GP/Tabs/"
 alias dv="viddl-rb"
 
@@ -87,7 +89,7 @@ alias new_fire='/Applications/Firefox.app/Contents/MacOS/firefox -no-remote -Pro
 
 # heroku
 alias gphm='git push heroku master'
-alias gpsm='git push staging main'
+alias gpsm='git push staging master'
 alias gpall='gpo && gphm'
 
 alias hr='heroku run'
@@ -135,27 +137,19 @@ alias rake='noglob rake'
 
 # node
 alias yrd='yarn run dev'
-alias ywb='yarn webpack --config config/development/webpack.js --mode=development --watch'
 
 # NGrok
 alias mgrok='ngrok http 3000 --subdomain=fedeaux'
 alias nrgrok='ngrok http 3000 --subdomain=naradio'
-alias ddgrok='ngrok http http://dodo.lvh.me:3000/ --subdomain=dodo'
+alias ggrok='ngrok http 3000 --subdomain=getaway'
 
 # other
 alias dcu='docker-compose up'
 alias rfa='redis-cli flushall'
 
-# python
-alias python='python3'
-alias pip='pip3'
+# fedeaux.com
+alias fw='python3 ~/configuration/terminal_setuper/fedeaux.py'
+alias afw='python3 ~/configuration/terminal_setuper/able/fino.py'
 
 # commands
 alias kg='ruby ~/configuration/commands/kill_ghost_processes.rb'
-
-# Android
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools

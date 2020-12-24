@@ -22,12 +22,12 @@ class Femacs
   end
 
   def dot_femacs_path
-    "#{@dir}.femacs"
+    "#{@dir}.fedeaux.yml"
   end
 
   def load_dot_femacs
     ensure_dot_femacs
-    @config = JSON.load File.read dot_femacs_path
+    @config = YAML.load dot_femacs_path
   end
 
   def persist_dot_femacs
@@ -40,8 +40,12 @@ class Femacs
     return if File.exist? dot_femacs_path
 
     File.open(dot_femacs_path, 'w') do |f|
-      f.write('{}')
+      f.write('')
     end
+  end
+
+  def find_this(thing_name)
+    puts "find #{thing_name}"
   end
 
   def favorites_add(file_name)

@@ -1,0 +1,59 @@
+function gsub(){
+    echo "s $1 -l $3 | xargs sed -i '' s/$1/$2/g"
+    s $1 -l $3 | xargs sed -i '' s/$1/$2/g
+}
+
+function fix_pg(){
+    rm /usr/local/var/postgres/postmaster.pid
+    launchctl unload homebrew.mxcl.postgresql.plist
+    launchctl load -w homebrew.mxcl.postgresql.plist
+}
+
+function rgm(){
+    echo "rails g model $*"
+    rails g model $*
+}
+
+function rge(){
+    echo "rails g entity $*"
+    rails g entity $*
+}
+
+function bk(){
+    filename="${1%%.*}"
+    extension="${1##*.}"
+
+    echo "cp $1 $filename.bk.$extension"
+    cp $1 $filename.bk.$extension
+}
+
+function bkrm(){
+    bk
+    echo "rm $1"
+    rm $1
+}
+
+function bku(){
+    filename="${1%%.*}"
+    extension="${1##*.}"
+
+    echo "cp $filename.bk.$extension $1"
+    cp $filename.bk.$extension $1
+
+    echo "rm $filename.bk.$extension"
+    rm $filename.bk.$extension
+}
+
+function ff(){
+  echo "find $2 | grep $1"
+  find $2 | grep $1
+}
+
+function sss() {
+  cp ~/Desktop/"$(ls ~/Desktop | grep "Screen Shot 2.*png" | tail -1)" $1
+}
+
+# sequelize
+function sqz(){
+  yarn sequelize $* --config apps/dodo/backend/db/config.json --options-path apps/dodo/backend/.sequelizerc
+}

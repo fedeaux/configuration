@@ -11,9 +11,9 @@ import iterm2
 import AppKit
 import asyncio
 
-class BirlTerminalSetuper:
+class WorldDominationTerminalSetuper:
     def __init__(self):
-        self.path = '~/Work/birl/web'
+        self.path = '~/Work/runa/payroll_v2'
 
     async def start(self, connection):
         app = await iterm2.async_get_app(connection)
@@ -76,6 +76,6 @@ class BirlTerminalSetuper:
         await session.async_send_text(f'clear \n {command} \n')
 
 async def main(connection):
-    await BirlTerminalSetuper().start(connection)
+    await WorldDominationTerminalSetuper().start(connection)
 
 iterm2.run_until_complete(main, True)

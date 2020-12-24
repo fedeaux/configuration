@@ -31,6 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     php
      auto-completion
      better-defaults
      csv
@@ -52,7 +53,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(vue-mode)
+   dotspacemacs-additional-packages '(vue-mode arduino-mode highlight-indent-guides)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -315,6 +316,16 @@ you should place your code here."
   (setq yas-snippet-dirs '("~/.emacs.d/private/snippets/"))
   (setq ruby-insert-encoding-magic-comment nil)
   (setq mmm-submode-decoration-level 0)
+  (setq flycheck-global-modes '(not sass-mode pug-mode))
+  (setq highlight-indent-guides-method 'character)
+
+  (setq-default
+   js2-basic-offset 2
+   css-indent-offset 2
+   web-mode-markup-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-attr-indent-offset 2)
 
   (add-to-list 'auto-mode-alist '("\\.aliases\\'" . sh-mode))
   (add-to-list 'auto-mode-alist '("\\.zshrc_ext\\'" . sh-mode))
@@ -345,16 +356,36 @@ you should place your code here."
     ;; (oi)
     )
 
+  (defun vue-mode-custom-hook ()
+    (emmet-mode)
+    (smartparens-mode)
+    (auto-complete-mode)
+    (set-custom-keys)
+    )
+
+  (defun sass-mode-custom-hook ()
+    (auto-complete-mode)
+    )
+
+  (defun custom-indent-guide-highlighter (level responsive display)
+    (if (> 1 level)
+        nil
+      (highlight-indent-guides--highlighter-default level responsive display)))
+
+  (setq highlight-indent-guides-highlighter-function 'custom-indent-guide-highlighter)
+
   ; Hooks
   (add-hook 'before-save-hook 'common-save-file)
   (add-hook 'after-change-major-mode-hook 'set-custom-keys)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
   (require 'vue-mode)
-  (add-to-list 'vue-mode-hook #'smartparens-mode)
-  (add-to-list 'vue-mode-hook #'auto-complete-mode)
+  (add-to-list 'vue-mode-hook #'vue-mode-custom-hook)
   (add-to-list 'coffee-mode-hook #'auto-complete-mode)
+  (add-to-list 'sass-mode-hook #'sass-mode-custom-hook)
 
   (load-file "~/Work/my/krl-mode/krl-mode.el")
+  (reload-custom)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -364,10 +395,18 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(clean-aindent-mode t)
  '(flycheck-checker-error-threshold 99999)
+ '(indent-tabs-mode nil)
+ '(js-indent-level 2)
  '(package-selected-packages
    (quote
-    (yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode cython-mode company-anaconda anaconda-mode pythonic vue-mode edit-indirect ssass-mode vue-html-mode yaml-mode web-mode web-beautify tagedit sql-indent slim-mode scss-mode sass-mode pug-mode livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc haml-mode go-guru go-eldoc emmet-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-go go-mode coffee-mode unfill mwim mmm-mode markdown-toc markdown-mode gh-md fuzzy flyspell-correct-ivy flyspell-correct flycheck-pos-tip pos-tip flycheck company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy))))
+    (highlight-indent-guides arduino-mode phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode cython-mode company-anaconda anaconda-mode pythonic vue-mode edit-indirect ssass-mode vue-html-mode yaml-mode web-mode web-beautify tagedit sql-indent slim-mode scss-mode sass-mode pug-mode livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor multiple-cursors js2-mode js-doc haml-mode go-guru go-eldoc emmet-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-go go-mode coffee-mode unfill mwim mmm-mode markdown-toc markdown-mode gh-md fuzzy flyspell-correct-ivy flyspell-correct flycheck-pos-tip pos-tip flycheck company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete rvm ruby-tools ruby-test-mode rubocop rspec-mode robe rbenv rake minitest chruby bundler inf-ruby ws-butler winum which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra indent-guide hydra lv hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation helm-make google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist highlight evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu elisp-slime-nav dumb-jump popup f dash s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed async aggressive-indent adaptive-wrap ace-window ace-link avy)))
+ '(tab-always-indent (quote complete))
+ '(web-mode-attr-indent-offset 2)
+ '(web-mode-code-indent-offset 2)
+ '(web-mode-css-indent-offset 2)
+ '(web-mode-markup-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
