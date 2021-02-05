@@ -56,7 +56,9 @@ This function should only modify configuration layer settings."
      php
      python
      react
-     (ruby :variables ruby-enable-enh-ruby-mode t)
+     (ruby :variables
+           ruby-enable-enh-ruby-mode t
+           ruby-prettier-on-save t)
      spell-checking
      sql
      syntax-checking
