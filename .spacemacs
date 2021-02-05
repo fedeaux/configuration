@@ -48,7 +48,8 @@ This function should only modify configuration layer settings."
      helm
      html
      ivy
-     javascript
+     (javascript :variables
+                 javascript-backend 'tide)
      lsp
      markdown
      multiple-cursors
@@ -61,7 +62,8 @@ This function should only modify configuration layer settings."
      syntax-checking
      treemacs
      (typescript :variables
-                 javascript-backend 'tide)
+                 typescript-indent-level 2
+                 typescript-tsx-indent-level 2)
      yaml
      )
 
@@ -537,9 +539,7 @@ before packages are loaded."
   (setq yas-snippet-dirs '("~/.emacs.d/private/snippets/"))
   (setq highlight-indent-guides-method 'character)
   (setq-default js2-basic-offset 2
-                js-indent-level 2
-                typescript-indent-level 2
-                typescript-tsx-indent-level 2)
+                js-indent-level 2)
 
   (add-to-list 'auto-mode-alist '("\\.aliases\\'" . sh-mode))
   (add-to-list 'auto-mode-alist '("\\.zshrc_ext\\'" . sh-mode))
@@ -576,6 +576,7 @@ before packages are loaded."
     (setq web-mode-code-indent-offset 2)
     (setq web-mode-attr-indent-offset 2)
     (setq web-mode-attr-value-indent-offset 2)
+    (setq web-mode-enable-auto-quoting nil)
     )
 
   (defun tide-setup-hook ()
