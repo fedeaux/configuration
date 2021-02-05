@@ -17,7 +17,7 @@ from terminal_setuper import TerminalSetuper
 
 class FinoTerminalSetuper(TerminalSetuper):
     def __init__(self):
-        self.app = { 'path': '~/Work/able/fino' }
+        self.app = { 'path': '~/Able/fino' }
 
     async def start(self, connection):
         app = await iterm2.async_get_app(connection)

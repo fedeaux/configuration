@@ -1,4 +1,4 @@
-plugins=(ruby git)
+plugins=(ruby)
 
 up-line-or-local-history() {
     zle set-local-history 1
