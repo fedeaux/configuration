@@ -136,6 +136,7 @@ alias rake='noglob rake'
 # node
 alias yrd='yarn run dev'
 alias ywb='yarn webpack --config config/development/webpack.js --mode=development --watch'
+alias yef='yarn eslint --fix'
 
 # NGrok
 alias mgrok='ngrok http 3000 --subdomain=fedeaux'

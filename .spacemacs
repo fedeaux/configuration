@@ -53,7 +53,6 @@ This function should only modify configuration layer settings."
      lsp
      markdown
      multiple-cursors
-     php
      python
      react
      (ruby :variables
