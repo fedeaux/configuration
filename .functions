@@ -57,3 +57,10 @@ function sss() {
 function sqz(){
   yarn sequelize $* --config apps/dodo/backend/db/config.json --options-path apps/dodo/backend/.sequelizerc
 }
+
+function gro(){
+  gxm
+  git fetch origin $1
+  gx $1
+  git reset --hard origin/$1
+}

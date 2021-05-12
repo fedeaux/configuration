@@ -82,7 +82,7 @@ alias opf="o ~/Music/_/GP/Tabs/"
 alias dv="viddl-rb"
 
 alias size='du -sh'
-alias rb='. ~/.zshrc'
+alias rlb='. ~/.zshrc'
 alias new_fire='/Applications/Firefox.app/Contents/MacOS/firefox -no-remote -ProfileManager > /dev/null'
 
 # heroku
@@ -109,7 +109,7 @@ alias rgmr='rails g migration'
 alias rjc='rake jobs:clear'
 alias rjw='rake jobs:work'
 alias rjwo='rake jobs:workoff'
-alias rr='rubocop -a --display-cop-names'
+alias rr='rubocop -A --display-cop-names'
 alias wpnd='wp && ga . && gcm wp && gpo && cpd'
 alias yibw='yarn install && ./bin/webpack-dev-server'
 

@@ -49,7 +49,8 @@ This function should only modify configuration layer settings."
      html
      ivy
      (javascript :variables
-                 javascript-backend 'tide)
+                 js2-mode-show-strict-warnings nil
+                 javascript-fmt-on-save t)
      lsp
      markdown
      multiple-cursors

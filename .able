@@ -1,0 +1,16 @@
+alias ts2js='node app/javascript/server/ts2js.js'
+
+function fa() {
+  for filename in `git diff --name-only --cached`
+  do
+    if [[ $filename =~ .*\.rb ]]
+    then
+      echo "rr $filename"
+      rr $filename
+    elif [[ $filename =~ .*\.(js)x?$ ]]
+    then
+      echo "yarn eslint --fix $filename"
+      yarn eslint --fix $filename
+    fi
+  done
+}
