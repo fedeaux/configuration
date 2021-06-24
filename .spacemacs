@@ -50,7 +50,9 @@ This function should only modify configuration layer settings."
      ivy
      (javascript :variables
                  js2-mode-show-strict-warnings nil
-                 javascript-fmt-on-save t)
+                 javascript-fmt-on-save t
+                 javascript-backend 'lsp
+                 )
      lsp
      markdown
      multiple-cursors
@@ -557,18 +559,21 @@ before packages are loaded."
     (untabify (point-min) (point-max))
     )
 
+  (defun local-ensure-key (key callback)
+    (local-unset-key key)
+    (local-set-key key callback)
+    )
+
   (defun set-custom-keys ()
     (local-unset-key (kbd "<f9>"))
-    (local-unset-key "\C-Z")
-    (local-set-key "\C-Z" 'undo)
-    (local-set-key "\C-X\C-R" 'replace-string)
-    (local-set-key "\C-C\C-C" 'comment-region)
-    (local-set-key "\C-C\C-U" 'uncomment-region)
-    (local-set-key "\C-X\C-L" 'goto-line)
-    (local-set-key "\C-C\C-S" 'sort-lines)
-    (local-set-key "\C-X\C-Y" 'yas-insert-snippet)
-    (local-set-key "\C-X\C-Y" 'yas-insert-snippet)
-    (local-set-key "\C-L" 'reload-custom)
+    (local-ensure-key "\C-Z" 'undo)
+    (local-ensure-key "\C-X\C-R" 'replace-string)
+    (local-ensure-key "\C-C\C-D" 'comment-region)
+    (local-ensure-key "\C-C\C-U" 'uncomment-region)
+    (local-ensure-key "\C-X\C-L" 'goto-line)
+    (local-ensure-key "\C-C\C-S" 'sort-lines)
+    (local-ensure-key "\C-X\C-Y" 'yas-insert-snippet)
+    (local-ensure-key "\C-L" 'reload-custom)
     )
 
   (defun my-web-mode-hook ()
@@ -595,10 +600,23 @@ before packages are loaded."
                          ("tsx" ('tide-setup-hook))
                          (_ (my-web-mode-hook)))))
 
+  (with-eval-after-load 'rjsx-mode
+    (define-key rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+    (set-custom-keys)
+    )
+
+  (with-eval-after-load 'lsp-mode
+    (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]public")
+    (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]tmp")
+    (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]log")
+    )
+
   (defun custom-indent-guide-highlighter (level responsive display)
     (if (> 1 level)
         nil
       (highlight-indent-guides--highlighter-default level responsive display)))
+
+  (setq yas-snippet-dirs '("~/configuration/fedeaux-mode/yas-snippets"))
 
   (setq highlight-indent-guides-highlighter-function 'custom-indent-guide-highlighter)
 
@@ -606,6 +624,7 @@ before packages are loaded."
   (add-hook 'before-save-hook 'common-save-file)
   (add-hook 'after-change-major-mode-hook 'set-custom-keys)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  (reload-custom)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
