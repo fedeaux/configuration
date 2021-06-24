@@ -150,6 +150,7 @@ alias rfa='redis-cli flushall'
 # fedeaux.com
 alias fw='python3 ~/configuration/terminal_setuper/fedeaux.py'
 alias afw='python3 ~/configuration/terminal_setuper/able/fino.py'
+alias akw='python3 ~/configuration/terminal_setuper/able/knit.py'
 
 # commands
 alias kg='ruby ~/configuration/commands/kill_ghost_processes.rb'

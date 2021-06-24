@@ -37,6 +37,8 @@ alias gra='git rebase --abort'
 
 alias gbl='git blame -L'
 
+alias gfo='git fetch origin'
+
 # git rebase this on develop
 alias grtd='gxd && gpld && gxl && grd'
 
