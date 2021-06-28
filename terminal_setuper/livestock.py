@@ -15,9 +15,9 @@ sys.path.insert(0,parentdir)
 
 from terminal_setuper import TerminalSetuper
 
-class FinoTerminalSetuper(TerminalSetuper):
+class LivestockTerminalSetuper(TerminalSetuper):
     def __init__(self):
-        self.app = { 'path': os.environ['TERMINAL_SETUPER_FINO_PATH'] }
+        self.app = { 'path': os.environ['TERMINAL_SETUPER_LIVESTOCK_PATH'] }
 
     async def start(self, connection):
         app = await iterm2.async_get_app(connection)
@@ -44,6 +44,6 @@ class FinoTerminalSetuper(TerminalSetuper):
         await self.cd(tab.session)
 
 async def main(connection):
-    await FinoTerminalSetuper().start(connection)
+    await LivestockTerminalSetuper().start(connection)
 
 iterm2.run_until_complete(main, True)

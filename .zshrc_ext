@@ -23,6 +23,9 @@ source /Users/fedorius/configuration/.able
 source /Users/fedorius/configuration/.fedeaux-mode.sh
 
 export EDITOR="emacsclient"
+echo 'export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"' >> ~/.zshrc
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # ==> libpq
 # libpq is keg-only, which means it was not symlinked into /usr/local,

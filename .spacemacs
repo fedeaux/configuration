@@ -251,7 +251,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 10.0
+                               :size 14.0
                                :weight normal
                                :width normal)
 
@@ -539,6 +539,7 @@ before packages are loaded."
   (show-smartparens-global-mode t)
   (smartparens-global-mode t)
 
+  (setq lsp-file-watch-ignored-directories (rx "node_modules"))
   (setq c-basic-offset 2)
   (setq yas-snippet-dirs '("~/.emacs.d/private/snippets/"))
   (setq highlight-indent-guides-method 'character)

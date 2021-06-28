@@ -1,6 +1,6 @@
 function gsub(){
-    echo "s $1 -l $3 | xargs sed -i '' s/$1/$2/g"
-    s $1 -l $3 | xargs sed -i '' s/$1/$2/g
+    echo "s $1 -l $3 | xargs sed -i '' s=$1=$2=g"
+    s $1 -l $3 | xargs sed -i '' s=$1=$2=g
 }
 
 function fix_pg(){

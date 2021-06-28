@@ -17,7 +17,8 @@ from terminal_setuper import TerminalSetuper
 
 class KnitTerminalSetuper(TerminalSetuper):
     def __init__(self):
-        self.app = { 'path': '~/Able/knit' }
+        print(os.environ)
+        self.app = { 'path': os.environ['TERMINAL_SETUPER_KNIT_PATH'] }
 
     async def start(self, connection):
         app = await iterm2.async_get_app(connection)
@@ -34,12 +35,14 @@ class KnitTerminalSetuper(TerminalSetuper):
         commands = [
             'docker-compose up',
             'rails server',
-            './bin/webpack-dev-server',
+            './bin/webpack-dev-server'
         ]
 
         await self.run_in_session(session, commands)
 
 async def main(connection):
     await KnitTerminalSetuper().start(connection)
+    tab = await self.window.async_create_tab()
+    await self.cd(tab.session)
 
 iterm2.run_until_complete(main, True)

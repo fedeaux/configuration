@@ -1,4 +1,10 @@
-alias ts2js='node app/javascript/server/ts2js.js'
+function ts2js() {
+  node app/javascript/server/ts2js.js $1 --unlink
+}
+
+function cometU() {
+  node app/javascript/server/comet/cli.js find-unused app/javascript
+}
 
 function fa() {
   for filename in `git diff --name-only --cached`
