@@ -601,6 +601,10 @@ before packages are loaded."
                          ("tsx" ('tide-setup-hook))
                          (_ (my-web-mode-hook)))))
 
+  (add-hook 'css-mode-hook
+            (lambda ()
+              (setq css-indent-offset 2)))
+
   (with-eval-after-load 'rjsx-mode
     (define-key rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
     (set-custom-keys)
