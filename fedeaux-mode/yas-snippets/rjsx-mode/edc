@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: edc
+# name: export default function
 # key: edc
 # --
 
@@ -10,5 +10,8 @@ import React, {
 } from "react";
 
 export default function $1() {
-  return <div>Oe</div>;
+  return (
+    <div>
+    </div>
+  );
 }
