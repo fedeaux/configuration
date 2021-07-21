@@ -7,9 +7,9 @@ function cometU() {
 }
 
 function fa() {
-  for filename in `git diff --name-only --cached`
+  for filename in `git diff --name-only --cached --diff-filter=d`
   do
-    if [[ $filename =~ .*\.rb ]]
+    if [[ $filename =~ .*\.rb && ! $filename =~ db\/schema\.rb ]]
     then
       echo "rr $filename"
       rr $filename
