@@ -35,7 +35,8 @@ class KnitTerminalSetuper(TerminalSetuper):
         commands = [
             'docker-compose up',
             'rails server',
-            './bin/webpack-dev-server'
+            './bin/webpack-dev-server',
+            'rails knit:watch_themes'
         ]
 
         await self.run_in_session(session, commands)
