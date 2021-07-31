@@ -2,6 +2,8 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
+(require 'smartparens-ruby)
+
 (setq ring-bell-function 'ignore)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -10,7 +12,8 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" default))
- '(package-selected-packages '(rvm robe company yasnippet alect-themes)))
+ '(package-selected-packages
+   '(robe flymake-ruby smartparens rvm company yasnippet alect-themes)))
 
 (defun common-save-file ()
   (delete-trailing-whitespace)
@@ -28,7 +31,10 @@
   (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
   (defun ido-define-keys () ;; C-n/p is more intuitive in vertical layout
     (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
-    (define-key ido-completion-map (kbd "<up>") 'ido-prev-match))
+    (define-key ido-completion-map (kbd "<up>") 'ido-prev-match)
+
+    ;; (define-key ido-completion-map (kbd "<tab>") 'ido-take-first-match)
+    )
   (add-hook 'ido-setup-hook 'ido-define-keys)
 
   ;; Random
@@ -36,7 +42,8 @@
   (delete-selection-mode 1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
-  (show-paren-mode 1)
+  (show-smartparens-global-mode t)
+  (smartparens-global-mode t)
   (toggle-scroll-bar -1)
   (tool-bar-mode -1)
   (visual-line-mode 1)
@@ -50,11 +57,9 @@
   (setq ruby-insert-encoding-magic-comment nil)
   (setq enh-ruby-add-encoding-comment-on-save nil)
   (rvm-use-default)
+  (add-hook 'ruby-mode-hook 'flymake-ruby-load)
   (add-hook 'ruby-mode-hook 'robe-mode)
-
-  ;; (setq ruby-version-manager 'rvm)
-  ;; (defadvice inf-ruby-console-auto (before activate-rvm-for-robe activate)
-  ;;   (rvm-activate-corresponding-ruby))
+  (add-hook 'ruby-mode-hook 'robe-start)
   )
 
 (defun local-ensure-key (key callback)
@@ -73,6 +78,7 @@
   (local-ensure-key "\C-C\C-S" 'sort-lines)
   (local-ensure-key "\C-X\C-Y" 'yas-insert-snippet)
   (local-ensure-key "\C-L" 'reload-custom)
+  (local-ensure-key "\C-C\C-E" 'eval-buffer)
   )
 
 (defun on-after-init ()
@@ -82,7 +88,7 @@
 (with-eval-after-load 'company-mode
   (add-to-list
    'company-backends
-   '(company-files company-dabbrev company-yasnippet company-robe)
+   '(company-files company-dabbrev company-yasnippet company-robe company-inf-ruby)
    )
   )
 
