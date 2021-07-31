@@ -555,6 +555,11 @@ before packages are loaded."
     (load "~/configuration/custom.el")
     )
 
+  (defun say-hi ()
+    (interactive)
+    (message "Hi!!!!")
+    )
+
   (defun common-save-file ()
     (delete-trailing-whitespace)
     (untabify (point-min) (point-max))
@@ -567,9 +572,10 @@ before packages are loaded."
 
   (defun set-custom-keys ()
     (local-unset-key (kbd "<f9>"))
+    (local-unset-key "\C-C\C-C")
     (local-ensure-key "\C-Z" 'undo)
     (local-ensure-key "\C-X\C-R" 'replace-string)
-    (local-ensure-key "\C-C\C-D" 'comment-region)
+    (local-ensure-key "\C-C\C-C" 'comment-region)
     (local-ensure-key "\C-C\C-U" 'uncomment-region)
     (local-ensure-key "\C-X\C-L" 'goto-line)
     (local-ensure-key "\C-C\C-S" 'sort-lines)
