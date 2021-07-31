@@ -1,9 +1,9 @@
-;;; krl-mode.el --- Major mode for editing Krl files
+;;; haml-mode.el --- Major mode for editing Haml files
 
 ;; Copyright (c) 2007, 2008 Natalie Weizenbaum
 
 ;; Author: Natalie Weizenbaum
-;; URL: https://github.com/nex3/krl-mode
+;; URL: https://github.com/nex3/haml-mode
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 ;; Package-Version: 0
 ;; Created: 2007-03-08
@@ -12,14 +12,14 @@
 
 ;;; Commentary:
 
-;; Because Krl's indentation schema is similar
+;; Because Haml's indentation schema is similar
 ;; to that of YAML and Python, many indentation-related
 ;; functions are similar to those in yaml-mode and python-mode.
 
 ;; To install, save this on your load path and add the following to
 ;; your .emacs file:
 ;;
-;; (require 'krl-mode)
+;; (require 'haml-mode)
 
 ;;; Code:
 
@@ -34,29 +34,29 @@
 
 ;; User definable variables
 
-(defgroup krl nil
-  "Support for the Krl template language."
+(defgroup haml nil
+  "Support for the Haml template language."
   :group 'languages
-  :prefix "krl-")
+  :prefix "haml-")
 
-(defcustom krl-mode-hook nil
-  "Hook run when entering Krl mode."
+(defcustom haml-mode-hook nil
+  "Hook run when entering Haml mode."
   :type 'hook
-  :group 'krl)
+  :group 'haml)
 
-(defcustom krl-indent-offset 2
+(defcustom haml-indent-offset 2
   "Amount of offset per level of indentation."
   :type 'integer
-  :group 'krl)
+  :group 'haml)
 
-(defcustom krl-backspace-backdents-nesting t
-  "Non-nil to have `krl-electric-backspace' re-indent blocks of code.
+(defcustom haml-backspace-backdents-nesting t
+  "Non-nil to have `haml-electric-backspace' re-indent blocks of code.
 This means that all code nested beneath the backspaced line is
 re-indented along with the line itself."
   :type 'boolean
-  :group 'krl)
+  :group 'haml)
 
-(defvar krl-indent-function 'krl-indent-p
+(defvar haml-indent-function 'haml-indent-p
   "A function for checking if nesting is allowed.
 This function should look at the current line and return t
 if the next line could be nested within this line.
@@ -64,12 +64,12 @@ if the next line could be nested within this line.
 The function can also return a positive integer to indicate
 a specific level to which the current line could be indented.")
 
-(defconst krl-tag-beg-re
-  "^[ \t]*\\([%\\.#\\\\][a-z0-9_:\\-]+\\)+\\(?:(.*)\\|{.*}\\|\\[.*\\]\\)*"
-  "A regexp matching the beginning of a Krl tag, through (), {}, and [].")
+(defconst haml-tag-beg-re
+  "^[ \t]*\\([%\\.#][a-z0-9_:\\-]+\\)+\\(?:(.*)\\|{.*}\\|\\[.*\\]\\)*"
+  "A regexp matching the beginning of a Haml tag, through (), {}, and [].")
 
-(defvar krl-block-openers
-  `(,(concat krl-tag-beg-re "[><]*[ \t]*$")
+(defvar haml-block-openers
+  `(,(concat haml-tag-beg-re "[><]*[ \t]*$")
     "^[ \t]*[&!]?[-=~].*do[ \t]*\\(|.*|[ \t]*\\)?$"
     ,(concat "^[ \t]*[&!]?[-=~][ \t]*\\("
              (regexp-opt '("if" "unless" "while" "until" "else" "for"
@@ -78,35 +78,35 @@ a specific level to which the current line could be indented.")
     "^[ \t]*/\\(\\[.*\\]\\)?[ \t]*$"
     "^[ \t]*-#"
     "^[ \t]*:")
-  "A list of regexps that match lines of Krl that open blocks.
-That is, a Krl line that can have text nested beneath it should
+  "A list of regexps that match lines of Haml that open blocks.
+That is, a Haml line that can have text nested beneath it should
 be matched by a regexp in this list.")
 
 
 ;; Font lock
 
-(defun krl-nested-regexp (re)
+(defun haml-nested-regexp (re)
   "Create a regexp to match a block starting with RE.
 The line containing RE is matched, as well as all lines indented beneath it."
   (concat "^\\([ \t]*\\)\\(" re "\\)\\([ \t]*\\(?:\n\\(?:\\1 +[^\n]*\\)?\\)*\n?\\)$"))
 
-(defconst krl-font-lock-keywords
-  `((krl-highlight-interpolation         1 font-lock-variable-name-face prepend)
-    (krl-highlight-ruby-tag 1 font-lock-preprocessor-face)
-    (krl-highlight-ruby-script 1 font-lock-preprocessor-face)
-    ;; TODO: distinguish between "/" comments, which can contain KRL
+(defconst haml-font-lock-keywords
+  `((haml-highlight-interpolation         1 font-lock-variable-name-face prepend)
+    (haml-highlight-ruby-tag 1 font-lock-preprocessor-face)
+    (haml-highlight-ruby-script 1 font-lock-preprocessor-face)
+    ;; TODO: distinguish between "/" comments, which can contain HAML
     ;; output directives, and "-#", which are completely ignored
-    krl-highlight-comment
-    krl-highlight-filter
+    haml-highlight-comment
+    haml-highlight-filter
     ("^!!!.*"                             0 font-lock-constant-face)
     ("\\s| *$"                            0 font-lock-string-face)))
 
-(defconst krl-filter-re (krl-nested-regexp ":[[:alnum:]_\\-]+"))
-(defconst krl-comment-re (krl-nested-regexp "\\(?:\\#\\|/\\)[^\n]*"))
+(defconst haml-filter-re (haml-nested-regexp ":[[:alnum:]_\\-]+"))
+(defconst haml-comment-re (haml-nested-regexp "\\(?:-\\#\\|/\\)[^\n]*"))
 
-(defun krl-highlight-comment (limit)
+(defun haml-highlight-comment (limit)
   "Highlight any -# or / comment found up to LIMIT."
-  (when (re-search-forward krl-comment-re limit t)
+  (when (re-search-forward haml-comment-re limit t)
     (let ((beg (match-beginning 0))
           (end (match-end 0)))
       (put-text-property beg end 'face 'font-lock-comment-face)
@@ -114,7 +114,7 @@ The line containing RE is matched, as well as all lines indented beneath it."
 
 ;; Fontifying sub-regions for other languages
 
-(defun krl-fontify-region
+(defun haml-fontify-region
     (beg end keywords syntax-table syntax-propertize-fn)
   "Fontify a region between BEG and END using another mode's fontification.
 
@@ -139,9 +139,9 @@ respectively."
           ;; so we have to move the beginning back one char
           (font-lock-fontify-region (1- beg) end))))))
 
-(defun krl-fontify-region-as-ruby (beg end)
+(defun haml-fontify-region-as-ruby (beg end)
   "Use Ruby's font-lock variables to fontify the region between BEG and END."
-  (krl-fontify-region beg end ruby-font-lock-keywords
+  (haml-fontify-region beg end ruby-font-lock-keywords
                        (if (boundp 'ruby-mode-syntax-table)
                            ruby-mode-syntax-table
                          ruby-font-lock-syntax-table)
@@ -149,18 +149,18 @@ respectively."
                            'ruby-syntax-propertize
                          'ruby-syntax-propertize-function)))
 
-(defun krl-fontify-region-as-css (beg end)
+(defun haml-fontify-region-as-css (beg end)
   "Fontify CSS code from BEG to END.
 
 This requires that `css-mode' is available.
 `css-mode' is included with Emacs 23."
   (when (boundp 'css-font-lock-keywords)
-    (krl-fontify-region beg end
+    (haml-fontify-region beg end
                          css-font-lock-keywords
                          css-mode-syntax-table
                          'css-syntax-propertize-function)))
 
-(defun krl-fontify-region-as-javascript (beg end)
+(defun haml-fontify-region-as-javascript (beg end)
   "Fontify javascript code from BEG to END.
 
 This requires that Karl Landström's javascript mode be available, either as the
@@ -170,47 +170,47 @@ elsewhere."
     (when (and (fboundp 'js--update-quick-match-re)
                (null js--quick-match-re-func))
       (js--update-quick-match-re))
-    (krl-fontify-region beg end
+    (haml-fontify-region beg end
                          js--font-lock-keywords-3
                          js-mode-syntax-table
                          #'js-syntax-propertize)))
 
-(defun krl-fontify-region-as-textile (beg end)
+(defun haml-fontify-region-as-textile (beg end)
   "Highlight textile from BEG to END.
 
 This requires that `textile-mode' be available.
 
 Note that the results are not perfect, since `textile-mode' expects
 certain constructs such as \"h1.\" to be at the beginning of a line,
-and indented Krl filters always have leading whitespace."
+and indented Haml filters always have leading whitespace."
   (if (boundp 'textile-font-lock-keywords)
-      (krl-fontify-region beg end textile-font-lock-keywords textile-mode-syntax-table nil)))
+      (haml-fontify-region beg end textile-font-lock-keywords textile-mode-syntax-table nil)))
 
-(defun krl-fontify-region-as-markdown (beg end)
+(defun haml-fontify-region-as-markdown (beg end)
   "Highlight markdown from BEG to END.
 
 This requires that `markdown-mode' be available."
   (if (boundp 'markdown-mode-font-lock-keywords)
-      (krl-fontify-region beg end
+      (haml-fontify-region beg end
                            markdown-mode-font-lock-keywords
                            markdown-mode-syntax-table
                            nil)))
 
-(defvar krl-fontify-filter-functions-alist
-  '(("ruby"       . krl-fontify-region-as-ruby)
-    ("css"        . krl-fontify-region-as-css)
-    ("javascript" . krl-fontify-region-as-javascript)
-    ("textile"    . krl-fontify-region-as-textile)
-    ("markdown"   . krl-fontify-region-as-markdown))
+(defvar haml-fontify-filter-functions-alist
+  '(("ruby"       . haml-fontify-region-as-ruby)
+    ("css"        . haml-fontify-region-as-css)
+    ("javascript" . haml-fontify-region-as-javascript)
+    ("textile"    . haml-fontify-region-as-textile)
+    ("markdown"   . haml-fontify-region-as-markdown))
   "An alist of (FILTER-NAME . FUNCTION) used to fontify code regions.
 FILTER-NAME is a string and FUNCTION is a function which will be
 used to fontify the filter's indented code region.  FUNCTION will
 be passed the extents of that region in two arguments BEG and
 END.")
 
-(defun krl-highlight-filter (limit)
+(defun haml-highlight-filter (limit)
   "Highlight any :filter region found in the text up to LIMIT."
-  (when (re-search-forward krl-filter-re limit t)
+  (when (re-search-forward haml-filter-re limit t)
     ;; fontify the filter name
     (put-text-property (match-beginning 2) (1+ (match-end 2))
                        'face font-lock-preprocessor-face)
@@ -218,7 +218,7 @@ END.")
           (code-start (1+ (match-beginning 3)))
           (code-end (match-end 3)))
       (save-match-data
-        (funcall (or (cdr (assoc filter-name krl-fontify-filter-functions-alist))
+        (funcall (or (cdr (assoc filter-name haml-fontify-filter-functions-alist))
                      #'(lambda (beg end)
                          (put-text-property beg end
                                             'face
@@ -226,29 +226,29 @@ END.")
                  code-start code-end))
       (goto-char (match-end 0)))))
 
-(defconst krl-possibly-multiline-code-re
+(defconst haml-possibly-multiline-code-re
   "\\(\\(?:.*?,[ \t]*\n\\)*.*\\)"
   "Regexp to match trailing ruby code which may continue onto subsequent lines.")
 
-(defconst krl-ruby-script-re
-  (concat "^[ \t]*\\(-\\|[&!]?\\(?:=\\|~\\)\\)[^=]" krl-possibly-multiline-code-re)
+(defconst haml-ruby-script-re
+  (concat "^[ \t]*\\(-\\|[&!]?\\(?:=\\|~\\)\\)[^=]" haml-possibly-multiline-code-re)
   "Regexp to match -, = or ~ blocks and any continued code lines.")
 
-(defun krl-highlight-ruby-script (limit)
+(defun haml-highlight-ruby-script (limit)
   "Highlight a Ruby script expression (-, =, or ~).
 LIMIT works as it does in `re-search-forward'."
-  (when (re-search-forward krl-ruby-script-re limit t)
-    (krl-fontify-region-as-ruby (match-beginning 2) (match-end 2))))
+  (when (re-search-forward haml-ruby-script-re limit t)
+    (haml-fontify-region-as-ruby (match-beginning 2) (match-end 2))))
 
-(defun krl-move (re)
+(defun haml-move (re)
   "Try matching and moving to the end of regular expression RE.
 Returns non-nil if the expression was sucessfully matched."
   (when (looking-at re)
     (goto-char (match-end 0))
     t))
 
-(defun krl-highlight-ruby-tag (limit)
-  "Highlight Ruby code within a Krl tag.
+(defun haml-highlight-ruby-tag (limit)
+  "Highlight Ruby code within a Haml tag.
 LIMIT works as it does in `re-search-forward'.
 
 This highlights the tag attributes and object refs of the tag,
@@ -259,16 +259,15 @@ For example, this will highlight all of the following:
   %p[@bar]
   %p= 'baz'
   %p{:foo => 'bar'}[@bar]= 'baz'"
-  (when (re-search-forward "^[ \t]*[%.#\\\\]" limit t)
+  (when (re-search-forward "^[ \t]*[%.#]" limit t)
     (forward-char -1)
 
     ;; Highlight tag, classes, and ids
-    (while (krl-move "\\([.#%\\\\]\\)[a-z0-9_:\\-]*")
+    (while (haml-move "\\([.#%]\\)[a-z0-9_:\\-]*")
       (put-text-property (match-beginning 0) (match-end 0) 'face
                          (cl-case (char-after (match-beginning 1))
                            (?% font-lock-keyword-face)
                            (?# font-lock-function-name-face)
-                           (?\\ font-lock-function-name-face)
                            (?. font-lock-variable-name-face))))
 
     (cl-block loop
@@ -279,26 +278,26 @@ For example, this will highlight all of the following:
             (?\[
              (forward-char 1)
              (let ((beg (point)))
-               (krl-limited-forward-sexp eol)
-               (krl-fontify-region-as-ruby beg (point))))
+               (haml-limited-forward-sexp eol)
+               (haml-fontify-region-as-ruby beg (point))))
             ;; Highlight new attr hashes
             (?\(
              (forward-char 1)
              (while
-                 (and (krl-parse-new-attr-hash
+                 (and (haml-parse-new-attr-hash
                        (lambda (type beg end)
                          (cl-case type
                            (name (put-text-property beg end
                                                     'face
                                                     font-lock-constant-face))
-                           (value (krl-fontify-region-as-ruby beg end)))))
+                           (value (haml-fontify-region-as-ruby beg end)))))
                       (not (eobp)))
                (forward-line 1)
                (beginning-of-line)))
             ;; Highlight old attr hashes
             (?\{
              (let ((beg (point)))
-               (krl-limited-forward-sexp eol)
+               (haml-limited-forward-sexp eol)
 
                ;; Check for multiline
                (while (and (eolp) (eq (char-before) ?,) (not (eobp)))
@@ -311,36 +310,36 @@ For example, this will highlight all of the following:
                      ;; If sexps have been closed,
                      ;; set the point at the end of the total sexp
                      (goto-char beg)
-                     (krl-limited-forward-sexp eol))))
+                     (haml-limited-forward-sexp eol))))
 
-               (krl-fontify-region-as-ruby (1+ beg) (point))))
+               (haml-fontify-region-as-ruby (1+ beg) (point))))
             (t (cl-return-from loop))))))
 
     ;; Move past end chars
-    (krl-move "[<>&!]+")
+    (haml-move "[<>&!]+")
     ;; Highlight script
-    (if (looking-at (concat "\\([=~]\\) " krl-possibly-multiline-code-re))
-        (krl-fontify-region-as-ruby (match-beginning 2) (match-end 2))
+    (if (looking-at (concat "\\([=~]\\) " haml-possibly-multiline-code-re))
+        (haml-fontify-region-as-ruby (match-beginning 2) (match-end 2))
       ;; Give font-lock something to highlight
       (forward-char -1)
       (looking-at "\\(\\)"))
     t))
 
-(defun krl-highlight-interpolation (limit)
+(defun haml-highlight-interpolation (limit)
   "Highlight Ruby interpolation (#{foo}).
 LIMIT works as it does in `re-search-forward'."
   (when (re-search-forward "\\(#{\\)" limit t)
     (save-match-data
       (forward-char -1)
       (let ((beg (point)))
-        (krl-limited-forward-sexp limit)
-        (krl-fontify-region-as-ruby (1+ beg) (point)))
+        (haml-limited-forward-sexp limit)
+        (haml-fontify-region-as-ruby (1+ beg) (point)))
       (when (eq (char-before) ?\})
         (put-text-property (1- (point)) (point)
                            'face font-lock-variable-name-face))
       t)))
 
-(defun krl-limited-forward-sexp (limit &optional arg)
+(defun haml-limited-forward-sexp (limit &optional arg)
   "Move forward using `forward-sexp' or to LIMIT, whichever comes first.
 With ARG, do it that many times."
   (let (forward-sexp-function)
@@ -353,7 +352,7 @@ With ARG, do it that many times."
          (signal 'scan-error (cdr err)))
        (goto-char limit)))))
 
-(defun krl-find-containing-block (re)
+(defun haml-find-containing-block (re)
   "If point is inside a block matching RE, return (start . end) for the block."
   (save-excursion
     (let ((pos (point))
@@ -369,7 +368,7 @@ With ARG, do it that many times."
       (when start
         (cons start end)))))
 
-(defun krl-maybe-extend-region (extender)
+(defun haml-maybe-extend-region (extender)
   "Maybe extend the font lock region using EXTENDER.
 With point at the beginning of the font lock region, EXTENDER is called.
 If it returns a (START . END) pair, those positions are used to possibly
@@ -385,37 +384,37 @@ extend the font lock region."
     (or (/= old-beg font-lock-beg)
         (/= old-end font-lock-end))))
 
-(defun krl-extend-region-nested-below ()
+(defun haml-extend-region-nested-below ()
   "Extend the font-lock region to any subsequent indented lines."
-  (krl-maybe-extend-region
+  (haml-maybe-extend-region
    (lambda ()
      (beginning-of-line)
-     (when (looking-at (krl-nested-regexp "[^ \t].*"))
+     (when (looking-at (haml-nested-regexp "[^ \t].*"))
        (cons (match-beginning 0) (match-end 0))))))
 
-(defun krl-extend-region-to-containing-block (re)
+(defun haml-extend-region-to-containing-block (re)
   "Extend the font-lock region to the smallest containing block matching RE."
-  (krl-maybe-extend-region
+  (haml-maybe-extend-region
    (lambda ()
-     (krl-find-containing-block re))))
+     (haml-find-containing-block re))))
 
-(defun krl-extend-region-filter ()
+(defun haml-extend-region-filter ()
   "Extend the font-lock region to an enclosing filter."
-  (krl-extend-region-to-containing-block krl-filter-re))
+  (haml-extend-region-to-containing-block haml-filter-re))
 
-(defun krl-extend-region-comment ()
+(defun haml-extend-region-comment ()
   "Extend the font-lock region to an enclosing comment."
-  (krl-extend-region-to-containing-block krl-comment-re))
+  (haml-extend-region-to-containing-block haml-comment-re))
 
-(defun krl-extend-region-ruby-script ()
+(defun haml-extend-region-ruby-script ()
   "Extend the font-lock region to encompass any current -/=/~ line."
-  (krl-extend-region-to-containing-block krl-ruby-script-re))
+  (haml-extend-region-to-containing-block haml-ruby-script-re))
 
-(defun krl-extend-region-multiline-hashes ()
+(defun haml-extend-region-multiline-hashes ()
   "Extend the font-lock region to encompass multiline attribute hashes."
-  (krl-maybe-extend-region
+  (haml-maybe-extend-region
    (lambda ()
-     (let ((attr-props (krl-parse-multiline-attr-hash))
+     (let ((attr-props (haml-parse-multiline-attr-hash))
            multiline-end
            start)
        (when attr-props
@@ -436,12 +435,12 @@ extend the font lock region."
          (goto-char (+ (cdr (assq 'point attr-props))
                        (cdr (assq 'hash-indent attr-props))
                        -1))
-         (krl-limited-forward-sexp
+         (haml-limited-forward-sexp
           (or multiline-end
               (save-excursion (end-of-line) (point))))
          (cons start (point)))))))
 
-(defun krl-extend-region-contextual ()
+(defun haml-extend-region-contextual ()
   "Extend the font lock region piecemeal.
 
 The result of calling this function repeatedly until it returns
@@ -449,82 +448,82 @@ nil is that (FONT-LOCK-BEG . FONT-LOCK-END) will be the smallest
 possible region in which font-locking could be affected by
 changes in the initial region."
   (or
-   (krl-extend-region-filter)
-   (krl-extend-region-comment)
-   (krl-extend-region-ruby-script)
-   (krl-extend-region-multiline-hashes)
-   (krl-extend-region-nested-below)
+   (haml-extend-region-filter)
+   (haml-extend-region-comment)
+   (haml-extend-region-ruby-script)
+   (haml-extend-region-multiline-hashes)
+   (haml-extend-region-nested-below)
    (font-lock-extend-region-multiline)))
 
 
 ;; Mode setup
 
-(defvar krl-mode-syntax-table
+(defvar haml-mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?: "." table)
     (modify-syntax-entry ?' "\"" table)
     table)
-  "Syntax table in use in `krl-mode' buffers.")
+  "Syntax table in use in `haml-mode' buffers.")
 
-(defvar krl-mode-map
+(defvar haml-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map [backspace] 'krl-electric-backspace)
-    (define-key map "\C-?" 'krl-electric-backspace)
-    (define-key map "\C-c\C-f" 'krl-forward-sexp)
-    (define-key map "\C-c\C-b" 'krl-backward-sexp)
-    (define-key map "\C-c\C-u" 'krl-up-list)
-    (define-key map "\C-c\C-d" 'krl-down-list)
-    (define-key map "\C-c\C-k" 'krl-kill-line-and-indent)
-    (define-key map "\C-c\C-r" 'krl-output-region)
-    (define-key map "\C-c\C-l" 'krl-output-buffer)
+    (define-key map [backspace] 'haml-electric-backspace)
+    (define-key map "\C-?" 'haml-electric-backspace)
+    (define-key map "\C-c\C-f" 'haml-forward-sexp)
+    (define-key map "\C-c\C-b" 'haml-backward-sexp)
+    (define-key map "\C-c\C-u" 'haml-up-list)
+    (define-key map "\C-c\C-d" 'haml-down-list)
+    (define-key map "\C-c\C-k" 'haml-kill-line-and-indent)
+    (define-key map "\C-c\C-r" 'haml-output-region)
+    (define-key map "\C-c\C-l" 'haml-output-buffer)
     map))
 
 ;;;###autoload
-(define-derived-mode krl-mode prog-mode "Krl"
-  "Major mode for editing Krl files.
+(define-derived-mode haml-mode prog-mode "Haml"
+  "Major mode for editing Haml files.
 
-\\{krl-mode-map}"
-  (setq font-lock-extend-region-functions '(krl-extend-region-contextual))
+\\{haml-mode-map}"
+  (setq font-lock-extend-region-functions '(haml-extend-region-contextual))
   (set (make-local-variable 'jit-lock-contextually) t)
   (set (make-local-variable 'font-lock-multiline) t)
-  (set (make-local-variable 'indent-line-function) 'krl-indent-line)
-  (set (make-local-variable 'indent-region-function) 'krl-indent-region)
+  (set (make-local-variable 'indent-line-function) 'haml-indent-line)
+  (set (make-local-variable 'indent-region-function) 'haml-indent-region)
   (set (make-local-variable 'parse-sexp-lookup-properties) t)
   (set (make-local-variable 'comment-start) "-#")
-  (setq font-lock-defaults '((krl-font-lock-keywords) t t))
+  (setq font-lock-defaults '((haml-font-lock-keywords) t t))
   (when (boundp 'electric-indent-inhibit)
     (setq electric-indent-inhibit t))
   (setq indent-tabs-mode nil))
 
 ;; Useful functions
 
-(defun krl-comment-block ()
-  "Comment the current block of Krl code."
+(defun haml-comment-block ()
+  "Comment the current block of Haml code."
   (interactive)
   (save-excursion
     (let ((indent (current-indentation)))
       (back-to-indentation)
-      (insert "#")
+      (insert "-#")
       (newline)
       (indent-to indent)
       (beginning-of-line)
-      (krl-mark-sexp)
-      (krl-reindent-region-by krl-indent-offset))))
+      (haml-mark-sexp)
+      (haml-reindent-region-by haml-indent-offset))))
 
-(defun krl-uncomment-block ()
-  "Uncomment the current block of Krl code."
+(defun haml-uncomment-block ()
+  "Uncomment the current block of Haml code."
   (interactive)
   (save-excursion
     (beginning-of-line)
-    (while (not (looking-at krl-comment-re))
-      (krl-up-list)
+    (while (not (looking-at haml-comment-re))
+      (haml-up-list)
       (beginning-of-line))
-    (krl-mark-sexp)
+    (haml-mark-sexp)
     (kill-line 1)
-    (krl-reindent-region-by (- krl-indent-offset))))
+    (haml-reindent-region-by (- haml-indent-offset))))
 
-(defun krl-replace-region (start end)
-  "Replace the current block of Krl code with the HTML equivalent.
+(defun haml-replace-region (start end)
+  "Replace the current block of Haml code with the HTML equivalent.
 Called from a program, START and END specify the region to indent."
   (interactive "r")
   (save-excursion
@@ -534,26 +533,26 @@ Called from a program, START and END specify the region to indent."
     (let ((ci (current-indentation)))
       (while (re-search-forward "^ +" end t)
         (replace-match (make-string (- (current-indentation) ci) ? ))))
-    (shell-command-on-region start end "krl" "krl-output" t)))
+    (shell-command-on-region start end "haml" "haml-output" t)))
 
-(defun krl-output-region (start end)
-  "Displays the HTML output for the current block of Krl code.
+(defun haml-output-region (start end)
+  "Displays the HTML output for the current block of Haml code.
 Called from a program, START and END specify the region to indent."
   (interactive "r")
   (kill-new (buffer-substring start end))
   (with-temp-buffer
     (yank)
-    (krl-indent-region (point-min) (point-max))
-    (shell-command-on-region (point-min) (point-max) "krl" "krl-output")))
+    (haml-indent-region (point-min) (point-max))
+    (shell-command-on-region (point-min) (point-max) "haml" "haml-output")))
 
-(defun krl-output-buffer ()
+(defun haml-output-buffer ()
   "Displays the HTML output for entire buffer."
   (interactive)
-  (krl-output-region (point-min) (point-max)))
+  (haml-output-region (point-min) (point-max)))
 
 ;; Navigation
 
-(defun krl-forward-through-whitespace (&optional backward)
+(defun haml-forward-through-whitespace (&optional backward)
   "Move the point forward through any whitespace.
 The point will move forward at least one line, until it reaches
 either the end of the buffer or a line with no whitespace.
@@ -565,27 +564,27 @@ If BACKWARD is non-nil, move the point backward instead."
              while (and (not (funcall endp))
                         (looking-at "^[ \t]*$")))))
 
-(defun krl-at-indent-p ()
+(defun haml-at-indent-p ()
   "Return non-nil if the point is before any text on the line."
   (let ((opoint (point)))
     (save-excursion
       (back-to-indentation)
       (>= (point) opoint))))
 
-(defun krl-forward-sexp (&optional arg)
+(defun haml-forward-sexp (&optional arg)
   "Move forward across one nested expression.
 With ARG, do it that many times.  Negative arg -N means move
 backward across N balanced expressions.
 
-A sexp in Krl is defined as a line of Krl code as well as any
+A sexp in Haml is defined as a line of Haml code as well as any
 lines nested beneath it."
   (interactive "p")
   (or arg (setq arg 1))
-  (if (and (< arg 0) (not (krl-at-indent-p)))
+  (if (and (< arg 0) (not (haml-at-indent-p)))
       (back-to-indentation)
     (while (/= arg 0)
       (let ((indent (current-indentation)))
-        (cl-loop do (krl-forward-through-whitespace (< arg 0))
+        (cl-loop do (haml-forward-through-whitespace (< arg 0))
                  while (and (not (eobp))
                             (not (bobp))
                             (> (current-indentation) indent)))
@@ -593,54 +592,54 @@ lines nested beneath it."
           (back-to-indentation))
         (setq arg (+ arg (if (> arg 0) -1 1)))))))
 
-(defun krl-backward-sexp (&optional arg)
+(defun haml-backward-sexp (&optional arg)
   "Move backward across one nested expression.
 With ARG, do it that many times.  Negative arg -N means move
 forward across N balanced expressions.
 
-A sexp in Krl is defined as a line of Krl code as well as any
+A sexp in Haml is defined as a line of Haml code as well as any
 lines nested beneath it."
   (interactive "p")
-  (krl-forward-sexp (if arg (- arg) -1)))
+  (haml-forward-sexp (if arg (- arg) -1)))
 
-(defun krl-up-list (&optional arg)
+(defun haml-up-list (&optional arg)
   "Move out of one level of nesting.
 With ARG, do this that many times."
   (interactive "p")
   (or arg (setq arg 1))
   (while (> arg 0)
     (let ((indent (current-indentation)))
-      (cl-loop do (krl-forward-through-whitespace t)
+      (cl-loop do (haml-forward-through-whitespace t)
                while (and (not (bobp))
                           (>= (current-indentation) indent)))
       (setq arg (1- arg))))
   (back-to-indentation))
 
-(defun krl-down-list (&optional arg)
+(defun haml-down-list (&optional arg)
   "Move down one level of nesting.
 With ARG, do this that many times."
   (interactive "p")
   (or arg (setq arg 1))
   (while (> arg 0)
     (let ((indent (current-indentation)))
-      (krl-forward-through-whitespace)
+      (haml-forward-through-whitespace)
       (when (<= (current-indentation) indent)
-        (krl-forward-through-whitespace t)
+        (haml-forward-through-whitespace t)
         (back-to-indentation)
         (error "Nothing is nested beneath this line"))
       (setq arg (1- arg))))
   (back-to-indentation))
 
-(defun krl-mark-sexp ()
-  "Mark the next Krl block."
-  (let ((forward-sexp-function 'krl-forward-sexp))
+(defun haml-mark-sexp ()
+  "Mark the next Haml block."
+  (let ((forward-sexp-function 'haml-forward-sexp))
     (mark-sexp)))
 
-(defun krl-mark-sexp-but-not-next-line ()
-  "Mark the next Krl block, but not the next line.
+(defun haml-mark-sexp-but-not-next-line ()
+  "Mark the next Haml block, but not the next line.
 Put the mark at the end of the last line of the sexp rather than
 the first non-whitespace character of the next line."
-  (krl-mark-sexp)
+  (haml-mark-sexp)
   (set-mark
    (save-excursion
      (goto-char (mark))
@@ -651,38 +650,38 @@ the first non-whitespace character of the next line."
 
 ;; Indentation and electric keys
 
-(defvar krl-empty-elements
+(defvar haml-empty-elements
   '("area" "base" "br" "col" "command" "embed" "hr" "img" "input"
     "keygen" "link" "meta" "param" "source" "track" "wbr")
   "A list of html elements which may not contain content.
 
 See http://www.w3.org/TR/html-markup/syntax.html.")
 
-(defun krl-unnestable-tag-p ()
+(defun haml-unnestable-tag-p ()
   "Return t if the current line is an empty element tag, or one with content."
-  (when (looking-at krl-tag-beg-re)
+  (when (looking-at haml-tag-beg-re)
     (save-excursion
       (goto-char (match-end 0))
-      (or (string-match-p (concat "%" (regexp-opt krl-empty-elements) "\\b")
+      (or (string-match-p (concat "%" (regexp-opt haml-empty-elements) "\\b")
                           (match-string 1))
           (progn
             (when (looking-at "[{(]")
               (ignore-errors (forward-sexp)))
             (looking-at "\\(?:=\\|==\\| \\)[[:blank:]]*[^[:blank:]\r\n]+"))))))
 
-(defun krl-indent-p ()
+(defun haml-indent-p ()
   "Return t if the current line can have lines nested beneath it."
-  (let ((attr-props (krl-parse-multiline-attr-hash)))
+  (let ((attr-props (haml-parse-multiline-attr-hash)))
     (if attr-props
-        (if (krl-unclosed-attr-hash-p)
+        (if (haml-unclosed-attr-hash-p)
             (cdr (assq 'hash-indent attr-props))
-          (+ (cdr (assq 'indent attr-props)) krl-indent-offset))
-      (unless (or (krl-unnestable-tag-p))
-        (cl-loop for opener in krl-block-openers
+          (+ (cdr (assq 'indent attr-props)) haml-indent-offset))
+      (unless (or (haml-unnestable-tag-p))
+        (cl-loop for opener in haml-block-openers
                  if (looking-at opener) return t
                  finally return nil)))))
 
-(cl-defun krl-parse-multiline-attr-hash ()
+(cl-defun haml-parse-multiline-attr-hash ()
   "Parses a multiline attribute hash, and returns
 an alist with the following keys:
 
@@ -696,30 +695,30 @@ beginning the hash."
   (save-excursion
     (while t
       (beginning-of-line)
-      (if (looking-at (concat krl-tag-beg-re "\\([{(]\\)"))
+      (if (looking-at (concat haml-tag-beg-re "\\([{(]\\)"))
           (progn
             (goto-char (1- (match-end 0)))
-            (krl-limited-forward-sexp (save-excursion (end-of-line) (point)))
-            (cl-return-from krl-parse-multiline-attr-hash
+            (haml-limited-forward-sexp (save-excursion (end-of-line) (point)))
+            (cl-return-from haml-parse-multiline-attr-hash
               (when (or (string-equal (match-string 1) "(") (eq (char-before) ?,))
                 `((indent . ,(current-indentation))
                   (hash-indent . ,(- (match-end 0) (match-beginning 0)))
                   (point . ,(match-beginning 0))))))
-        (when (bobp) (cl-return-from krl-parse-multiline-attr-hash))
+        (when (bobp) (cl-return-from haml-parse-multiline-attr-hash))
         (forward-line -1)
-        (unless (krl-unclosed-attr-hash-p)
-          (cl-return-from krl-parse-multiline-attr-hash))))))
+        (unless (haml-unclosed-attr-hash-p)
+          (cl-return-from haml-parse-multiline-attr-hash))))))
 
-(cl-defun krl-unclosed-attr-hash-p ()
+(cl-defun haml-unclosed-attr-hash-p ()
   "Return t if this line has an unclosed attribute hash, new or old."
   (save-excursion
     (end-of-line)
-    (when (eq (char-before) ?,) (cl-return-from krl-unclosed-attr-hash-p t))
+    (when (eq (char-before) ?,) (cl-return-from haml-unclosed-attr-hash-p t))
     (re-search-backward "(\\|^")
-    (krl-move "(")
-    (krl-parse-new-attr-hash)))
+    (haml-move "(")
+    (haml-parse-new-attr-hash)))
 
-(cl-defun krl-parse-new-attr-hash (&optional (fn (lambda (type beg end) ())))
+(cl-defun haml-parse-new-attr-hash (&optional (fn (lambda (type beg end) ())))
   "Parse a new-style attribute hash on this line, and returns
 t if it's not finished on the current line.
 
@@ -727,38 +726,38 @@ FN should take three parameters: TYPE, BEG, and END.
 TYPE is the type of text parsed ('name or 'value)
 and BEG and END delimit that text in the buffer."
   (let ((eol (save-excursion (end-of-line) (point))))
-    (while (not (krl-move ")"))
-      (krl-move "[ \t]*")
-      (unless (krl-move "[a-z0-9_:\\-]+")
-        (cl-return-from krl-parse-new-attr-hash (krl-move "[ \t]*$")))
+    (while (not (haml-move ")"))
+      (haml-move "[ \t]*")
+      (unless (haml-move "[a-z0-9_:\\-]+")
+        (cl-return-from haml-parse-new-attr-hash (haml-move "[ \t]*$")))
       (funcall fn 'name (match-beginning 0) (match-end 0))
-      (krl-move "[ \t]*")
-      (when (krl-move "=")
-        (krl-move "[ \t]*")
-        (unless (looking-at "[\"'@a-z0-9]") (cl-return-from krl-parse-new-attr-hash))
+      (haml-move "[ \t]*")
+      (when (haml-move "=")
+        (haml-move "[ \t]*")
+        (unless (looking-at "[\"'@a-z0-9]") (cl-return-from haml-parse-new-attr-hash))
         (let ((beg (point)))
-          (krl-limited-forward-sexp eol)
+          (haml-limited-forward-sexp eol)
           (funcall fn 'value beg (point)))
-        (krl-move "[ \t]*")))
+        (haml-move "[ \t]*")))
     nil))
 
-(defun krl-compute-indentation ()
+(defun haml-compute-indentation ()
   "Calculate the maximum sensible indentation for the current line."
   (save-excursion
     (beginning-of-line)
     (if (bobp) (list 0 nil)
-      (krl-forward-through-whitespace t)
-      (let ((indent (funcall krl-indent-function)))
+      (haml-forward-through-whitespace t)
+      (let ((indent (funcall haml-indent-function)))
         (cond
          ((consp indent) indent)
          ((integerp indent) (list indent t))
-         (indent (list (+ (current-indentation) krl-indent-offset) nil))
+         (indent (list (+ (current-indentation) haml-indent-offset) nil))
          (t (list (current-indentation) nil)))))))
 
-(defun krl-indent-region (start end)
+(defun haml-indent-region (start end)
   "Indent each nonblank line in the region.
 This is done by indenting the first line based on
-`krl-compute-indentation' and preserving the relative
+`haml-compute-indentation' and preserving the relative
 indentation of the rest of the region.  START and END specify the
 region to indent.
 
@@ -771,8 +770,8 @@ between possible indentations."
     (let (this-line-column current-column
                            (next-line-column
                             (if (and (equal last-command this-command) (/= (current-indentation) 0))
-                                (* (/ (1- (current-indentation)) krl-indent-offset) krl-indent-offset)
-                              (car (krl-compute-indentation)))))
+                                (* (/ (1- (current-indentation)) haml-indent-offset) haml-indent-offset)
+                              (car (haml-compute-indentation)))))
       (while (< (point) end)
         (setq this-line-column next-line-column
               current-column (current-indentation))
@@ -789,26 +788,26 @@ between possible indentations."
         (forward-line 1)))
     (move-marker end nil)))
 
-(defun krl-indent-line ()
+(defun haml-indent-line ()
   "Indent the current line.
 The first time this command is used, the line will be indented to the
 maximum sensible indentation.  Each immediately subsequent usage will
-back-dent the line by `krl-indent-offset' spaces.  On reaching column
+back-dent the line by `haml-indent-offset' spaces.  On reaching column
 0, it will cycle back to the maximum sensible indentation."
   (interactive "*")
   (let ((ci (current-indentation))
         (cc (current-column)))
-    (cl-destructuring-bind (need strict) (krl-compute-indentation)
+    (cl-destructuring-bind (need strict) (haml-compute-indentation)
       (save-excursion
         (beginning-of-line)
         (delete-horizontal-space)
         (if (and (not strict) (equal last-command this-command) (/= ci 0))
-            (indent-to (* (/ (1- ci) krl-indent-offset) krl-indent-offset))
+            (indent-to (* (/ (1- ci) haml-indent-offset) haml-indent-offset))
           (indent-to need))))
     (when (< (current-column) (current-indentation))
       (forward-to-indentation 0))))
 
-(defun krl-reindent-region-by (n)
+(defun haml-reindent-region-by (n)
   "Add N spaces to the beginning of each line in the region.
 If N is negative, will remove the spaces instead.  Assumes all
 lines in the region have indentation >= that of the first line."
@@ -826,14 +825,14 @@ lines in the region have indentation >= that of the first line."
           (beginning-of-line)
           (indent-to (max 0 (+ ci n))))))))
 
-(defun krl-electric-backspace (arg)
+(defun haml-electric-backspace (arg)
   "Delete characters or back-dent the current line.
 If invoked following only whitespace on a line, will back-dent
 the line and all nested lines to the immediately previous
-multiple of `krl-indent-offset' spaces.  With ARG, do it that
+multiple of `haml-indent-offset' spaces.  With ARG, do it that
 many times.
 
-Set `krl-backspace-backdents-nesting' to nil to just back-dent
+Set `haml-backspace-backdents-nesting' to nil to just back-dent
 the current line."
   (interactive "*p")
   (if (or (/= (current-indentation) (current-column))
@@ -846,27 +845,27 @@ the current line."
       (beginning-of-line)
       (unwind-protect
           (progn
-            (if krl-backspace-backdents-nesting
-                (krl-mark-sexp-but-not-next-line)
+            (if haml-backspace-backdents-nesting
+                (haml-mark-sexp-but-not-next-line)
               (set-mark (save-excursion (end-of-line) (point))))
-            (krl-reindent-region-by (* (- arg) krl-indent-offset)))
+            (haml-reindent-region-by (* (- arg) haml-indent-offset)))
         (pop-mark)))
     (back-to-indentation)))
 
-(defun krl-kill-line-and-indent ()
+(defun haml-kill-line-and-indent ()
   "Kill the current line, and re-indent all lines nested beneath it."
   (interactive)
   (beginning-of-line)
-  (krl-mark-sexp-but-not-next-line)
+  (haml-mark-sexp-but-not-next-line)
   (kill-line 1)
-  (krl-reindent-region-by (* -1 krl-indent-offset)))
+  (haml-reindent-region-by (* -1 haml-indent-offset)))
 
-(defun krl-indent-string ()
-  "Return the indentation string for `krl-indent-offset'."
-  (mapconcat 'identity (make-list krl-indent-offset " ") ""))
+(defun haml-indent-string ()
+  "Return the indentation string for `haml-indent-offset'."
+  (mapconcat 'identity (make-list haml-indent-offset " ") ""))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.krl\\'" . krl-mode))
+(add-to-list 'auto-mode-alist '("\\.haml\\'" . haml-mode))
 
 
 ;; Local Variables:
@@ -875,5 +874,5 @@ the current line."
 ;; eval: (checkdoc-minor-mode 1)
 ;; End:
 
-(provide 'krl-mode)
-;;; krl-mode.el ends here
+(provide 'haml-mode)
+;;; haml-mode.el ends here
