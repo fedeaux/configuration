@@ -13,11 +13,16 @@
  '(custom-safe-themes
    '("04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" default))
  '(package-selected-packages
-   '(robe flymake-ruby smartparens rvm company yasnippet alect-themes)))
+   '(web-mode slim-mode yaml-mode lsp-mode rjsx-mode projectile robe flymake-ruby smartparens rvm company yasnippet alect-themes)))
 
 (defun common-save-file ()
   (delete-trailing-whitespace)
   (untabify (point-min) (point-max))
+  )
+
+(defun pretend-it-is-ret ()
+  (interactive)
+  (execute-kbd-macro (kbd "RET"))
   )
 
 (defun customize-stuff()
@@ -27,14 +32,16 @@
   (ido-mode 1)
   (setq ido-use-virtual-buffers t)
   (setq ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
+  (setq ido-show-confirm-message nil)
   (defun ido-disable-line-truncation () (set (make-local-variable 'truncate-lines) nil))
   (add-hook 'ido-minibuffer-setup-hook 'ido-disable-line-truncation)
-  (defun ido-define-keys () ;; C-n/p is more intuitive in vertical layout
+
+  (defun ido-define-keys ()
     (define-key ido-completion-map (kbd "<down>") 'ido-next-match)
     (define-key ido-completion-map (kbd "<up>") 'ido-prev-match)
-
-    ;; (define-key ido-completion-map (kbd "<tab>") 'ido-take-first-match)
+    (define-key ido-completion-map (kbd "<tab>") 'pretend-it-is-ret)
     )
+
   (add-hook 'ido-setup-hook 'ido-define-keys)
 
   ;; Random
@@ -47,7 +54,14 @@
   (toggle-scroll-bar -1)
   (tool-bar-mode -1)
   (visual-line-mode 1)
+  (setq create-lockfiles nil)
   (setq vc-follow-symlinks nil)
+
+  ;; Tmp files location
+  (add-to-list 'backup-directory-alist
+               (cons "." "~/tmp/emacs-stuff/"))
+  (customize-set-variable
+   'tramp-backup-directory-alist backup-directory-alist)
 
   ;; Yas
   (yas-global-mode 1)
@@ -59,7 +73,23 @@
   (rvm-use-default)
   (add-hook 'ruby-mode-hook 'flymake-ruby-load)
   (add-hook 'ruby-mode-hook 'robe-mode)
-  (add-hook 'ruby-mode-hook 'robe-start)
+
+  ;; JS
+  (setq-default js2-basic-offset 2
+                js-indent-level 2)
+
+  ;; Python
+  (setq-default python-indent 2)
+
+  ;; Web mode
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode."
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    )
+  (add-hook 'web-mode-hook 'my-web-mode-hook)
+  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
   )
 
 (defun local-ensure-key (key callback)
@@ -79,6 +109,7 @@
   (local-ensure-key "\C-X\C-Y" 'yas-insert-snippet)
   (local-ensure-key "\C-L" 'reload-custom)
   (local-ensure-key "\C-C\C-E" 'eval-buffer)
+  (local-ensure-key "\C-F\C-F" 'projectile-find-file)
   )
 
 (defun on-after-init ()

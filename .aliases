@@ -143,6 +143,7 @@ alias yef='yarn eslint --fix'
 # NGrok
 alias mgrok='ngrok http 3000 --subdomain=fedeaux'
 alias nrgrok='ngrok http 3000 --subdomain=naradio'
+alias wgrok='ngrok http 3000 --subdomain=wordable-fedeaux'
 alias ddgrok='ngrok http http://dodo.lvh.me:3000/ --subdomain=dodo'
 
 # other

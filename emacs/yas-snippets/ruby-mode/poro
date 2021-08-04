@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: poro
+# key: poro
+# --
+class $1
+  attr_accessor :$2
+
+  def initialize($2)
+  end
+end

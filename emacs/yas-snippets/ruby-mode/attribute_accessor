@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: attribute_accessor
+# key: attra
+# --
+attribute_accessor :$1
