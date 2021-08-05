@@ -13,7 +13,8 @@
  '(custom-safe-themes
    '("04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" default))
  '(package-selected-packages
-   '(web-mode slim-mode yaml-mode lsp-mode rjsx-mode projectile robe flymake-ruby smartparens rvm company yasnippet alect-themes)))
+   '(prettier-js exec-path-from-shell tide web-mode slim-mode yaml-mode lsp-mode rjsx-mode projectile robe flymake-ruby smartparens rvm company yasnippet alect-themes))
+ '(tramp-backup-directory-alist '(("." . "~/tmp/emacs-stuff/")) t))
 
 (defun common-save-file ()
   (delete-trailing-whitespace)
@@ -27,6 +28,9 @@
 
 (defun customize-stuff()
   (load-theme 'alect-black)
+
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
 
   ;; Ido
   (ido-mode 1)
@@ -90,6 +94,14 @@
     )
   (add-hook 'web-mode-hook 'my-web-mode-hook)
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+
+  (defun tide-setup-hook()
+    (interactive)
+    (tide-setup)
+    (prettier-js-mode)
+    )
+
+  (add-hook 'rjsx-mode-hook 'tide-setup-hook)
   )
 
 (defun local-ensure-key (key callback)
@@ -119,7 +131,7 @@
 (with-eval-after-load 'company-mode
   (add-to-list
    'company-backends
-   '(company-files company-dabbrev company-yasnippet company-robe company-inf-ruby)
+   '(company-files company-dabbrev company-yasnippet company-robe company-inf-ruby company-tide)
    )
   )
 
