@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: useCallback
+# key: ucb
+# --
+useCallback(($1) => {
+  return $2;
+}, [])

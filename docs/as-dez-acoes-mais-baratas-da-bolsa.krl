@@ -42,3 +42,4 @@ Para de desempatar entre ações da mesma
 \p Relação entre ebit e resultado operacional?
 
 \qstn Da pra melhorar a estratégia levando em consideração empresas com endividamento alto?
+\qstn Da pra melhorar a estratégia levando em consideração dy >= 7%/ano ?
