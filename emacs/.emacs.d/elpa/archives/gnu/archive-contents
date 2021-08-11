@@ -18,7 +18,7 @@
 	 ("Leo Liu" . "sdl.web@gmail.com"))
 	(:keywords "tools" "processes" "convenience"))])
  (ada-mode .
-	   [(7 1 6)
+	   [(7 1 7)
 	    ((uniquify-files
 	      (1 0 1))
 	     (wisi
@@ -646,11 +646,9 @@
 	       ("Leo Liu" . "sdl.web@gmail.com"))
 	      (:keywords "killing" "convenience"))])
  (ebdb .
-       [(0 7)
+       [(0 7 1)
 	((emacs
 	  (25 1))
-	 (cl-lib
-	  (0 5))
 	 (seq
 	  (2 15)))
 	"Contact management package" tar
@@ -690,7 +688,7 @@
 	      (:maintainer "Markus Triska" . "triska@metalevel.at")
 	      (:url . "https://www.metalevel.at/ediprolog/"))])
  (eev .
-      [(20210710)
+      [(20210806)
        ((emacs
 	 (24 4)))
        "Support for e-scripts (eepitch blocks, elisp hyperlinks, etc)" tar

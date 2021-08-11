@@ -156,5 +156,7 @@ alias afw='python3 ~/configuration/terminal_setuper/able/fino.py'
 alias akw='python3 ~/configuration/terminal_setuper/able/knit.py'
 alias ahw='python3 ~/configuration/terminal_setuper/able/portage.py'
 
+alias ww='python3 ~/configuration/terminal_setuper/wordable.py'
+
 # commands
 alias kg='ruby ~/configuration/commands/kill_ghost_processes.rb'
