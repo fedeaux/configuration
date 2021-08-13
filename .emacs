@@ -34,6 +34,7 @@
 
   ;; Ido
   (ido-mode 1)
+  (setq ido-create-new-buffer 'always)
   (setq ido-use-virtual-buffers t)
   (setq ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
   (setq ido-show-confirm-message nil)
