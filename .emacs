@@ -1,3 +1,5 @@
+;; npm install -g prettier typescript
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
@@ -132,7 +134,7 @@
 (with-eval-after-load 'company-mode
   (add-to-list
    'company-backends
-   '(company-files company-dabbrev company-yasnippet company-robe company-inf-ruby company-tide)
+   '(company-files company-dabbrev company-yasnippet company-robe company-inf-ruby company-tide company-lsp)
    )
   )
 
