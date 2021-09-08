@@ -17,7 +17,7 @@ from terminal_setuper import TerminalSetuper
 
 class WordableTerminalSetuper(TerminalSetuper):
     def __init__(self):
-        self.app = { 'path': '~/Work/.bk/interviews/wordable/wordable-coding-challenge-pb' }
+        self.app = { 'path': os.environ['TERMINAL_SETUPER_WORDABLE_PATH'] }
 
     async def start(self, connection):
         app = await iterm2.async_get_app(connection)
