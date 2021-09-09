@@ -27,21 +27,29 @@ class WordableTerminalSetuper(TerminalSetuper):
 
     async def setup(self):
         self.current_app = self.app
+
         session = self.window.current_tab.current_session
 
-        await self.cd(session)
-
-        commands = [
+        await self.run_in_session(session, [
             'docker-compose up',
-            'rails server',
             './bin/webpack-dev-server',
             'wgrok'
+        ])
+
+        tabs = [
+            [
+                'rails server',
+                'bundle exec sidekiq'
+            ],
+            [
+                'rails console',
+                'clear'
+            ]
         ]
 
-        await self.run_in_session(session, commands)
+        for commands in tabs:
+            await self.run_in_new_tab(commands)
 
-        tab = await self.window.async_create_tab()
-        await self.cd(tab.session)
 
 async def main(connection):
     await WordableTerminalSetuper().start(connection)
