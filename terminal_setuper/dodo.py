@@ -15,9 +15,9 @@ sys.path.insert(0,parentdir)
 
 from terminal_setuper import TerminalSetuper
 
-class WordableTerminalSetuper(TerminalSetuper):
+class DodoTerminalSetuper(TerminalSetuper):
     def __init__(self):
-        self.app = { 'path': os.environ['TERMINAL_SETUPER_WORDABLE_PATH'] }
+        self.app = { 'path': os.environ['TERMINAL_SETUPER_DODO_PATH'] }
 
     async def start(self, connection):
         app = await iterm2.async_get_app(connection)
@@ -27,31 +27,23 @@ class WordableTerminalSetuper(TerminalSetuper):
 
     async def setup(self):
         self.current_app = self.app
-
         session = self.window.current_tab.current_session
 
-        await self.run_in_session(session, [
-            'docker-compose up',
-            './bin/webpack-dev-server',
-            'wgrok'
-        ])
+        await self.cd(session)
 
-        tabs = [
-            [
-                'rails server',
-                'bundle exec sidekiq'
-            ],
-            [
-                'rails console',
-                'clear'
-            ]
+        commands = [
+            'docker-compose up',
+            'rails server',
+            './bin/webpack-dev-server',
+            'bundle exec sidekiq'
         ]
 
-        for commands in tabs:
-            await self.run_in_new_tab(commands)
+        await self.run_in_session(session, commands)
 
+        tab = await self.window.async_create_tab()
+        await self.cd(tab.session)
 
 async def main(connection):
-    await WordableTerminalSetuper().start(connection)
+    await DodoTerminalSetuper().start(connection)
 
 iterm2.run_until_complete(main, True)
