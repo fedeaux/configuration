@@ -15,7 +15,7 @@
  '(custom-safe-themes
    '("04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" default))
  '(package-selected-packages
-   '(highlight-indent-guides sass-mode prettier-js exec-path-from-shell tide coffee-mode web-mode slim-mode yaml-mode lsp-mode rjsx-mode projectile robe flymake-ruby smartparens rvm company yasnippet alect-themes))
+   '(php-mode highlight-indent-guides sass-mode prettier-js exec-path-from-shell tide coffee-mode web-mode slim-mode yaml-mode lsp-mode rjsx-mode projectile robe flymake-ruby smartparens rvm company yasnippet alect-themes))
  '(tramp-backup-directory-alist '(("." . "~/tmp/emacs-stuff/")) t))
 
 (defun common-save-file ()
@@ -140,6 +140,7 @@
 
 (defun on-after-init ()
   (global-company-mode)
+  (server-start)
   )
 
 (with-eval-after-load 'company-mode
