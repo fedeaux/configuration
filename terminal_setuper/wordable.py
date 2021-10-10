@@ -50,7 +50,6 @@ class WordableTerminalSetuper(TerminalSetuper):
         for commands in tabs:
             await self.run_in_new_tab(commands)
 
-
 async def main(connection):
     await WordableTerminalSetuper().start(connection)
 

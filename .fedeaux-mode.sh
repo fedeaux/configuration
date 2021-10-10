@@ -88,8 +88,8 @@ alias rb='. ~/.zshrc'
 alias new_fire='/Applications/Firefox.app/Contents/MacOS/firefox -no-remote -ProfileManager > /dev/null'
 
 # heroku
-alias gphm='git push heroku master'
-alias gpsm='git push staging master'
+alias gphm='git push heroku main'
+alias gpsm='git push staging main'
 alias gpall='gpo && gphm'
 
 alias hr='heroku run'
@@ -150,6 +150,8 @@ alias rfa='redis-cli flushall'
 # fedeaux.com
 alias fw='python3 ~/configuration/terminal_setuper/fedeaux.py'
 alias lw='python3 ~/configuration/terminal_setuper/livestock.py'
+alias dw='python3 ~/configuration/terminal_setuper/dodo.py'
+alias bw='python3 ~/configuration/terminal_setuper/blog.py'
 
 # wordable
 alias ww='python3 ~/configuration/terminal_setuper/wordable.py'

@@ -15,9 +15,9 @@ sys.path.insert(0,parentdir)
 
 from terminal_setuper import TerminalSetuper
 
-class DodoTerminalSetuper(TerminalSetuper):
+class BlogTerminalSetuper(TerminalSetuper):
     def __init__(self):
-        self.app = { 'path': os.environ['TERMINAL_SETUPER_DODO_PATH'] }
+        self.app = { 'path': os.environ['TERMINAL_SETUPER_BLOG_PATH'] }
 
     async def start(self, connection):
         app = await iterm2.async_get_app(connection)
@@ -32,8 +32,7 @@ class DodoTerminalSetuper(TerminalSetuper):
 
         await self.run_in_session(session, [
             'docker-compose up',
-            './bin/webpack-dev-server',
-            'mgrok'
+            './bin/webpack-dev-server'
         ])
 
         tabs = [
@@ -51,6 +50,6 @@ class DodoTerminalSetuper(TerminalSetuper):
             await self.run_in_new_tab(commands)
 
 async def main(connection):
-    await DodoTerminalSetuper().start(connection)
+    await BlogTerminalSetuper().start(connection)
 
 iterm2.run_until_complete(main, True)
