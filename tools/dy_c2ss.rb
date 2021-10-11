@@ -1,7 +1,7 @@
 # $('.exchange-items')
 
 require 'nokogiri'
-base_file_name = './dy_c2ss/01-06-2021_31-08-2021'
+base_file_name = './dy_c2ss/15-09-2021_11-10-2021'
 
 html = File.read "#{base_file_name}.html"
 doc = Nokogiri::HTML html
@@ -16,9 +16,15 @@ doc.css('.item').each do |item|
 
   value = item.css('.cont-value').first.text.gsub(",", ".").strip
   settlement = item.css('.settlement').first.text
-  amount_and_code = description.strip.match(/\d+\s+.*/)[0].gsub("PAPEL", "").split(/\s+/)
-  amount = amount_and_code[0].strip
-  code = amount_and_code[1].strip
+
+  begin
+    amount_and_code = description.strip.match(/\d+\s+.*/)[0].gsub("PAPEL", "").split(/\s+/)
+    amount = amount_and_code[0].strip
+    code = amount_and_code[1].strip
+  rescue
+    puts description
+    next
+  end
 
   nature = if description.include?("RENDIMENTO")
              "Rendimento"
