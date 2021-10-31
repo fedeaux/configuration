@@ -1,7 +1,7 @@
 # $('.exchange-items')
 
 require 'nokogiri'
-base_file_name = './dy_c2ss/15-09-2021_11-10-2021'
+base_file_name = './dy_c2ss/15-10-2021'
 
 html = File.read "#{base_file_name}.html"
 doc = Nokogiri::HTML html
