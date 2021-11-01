@@ -10,7 +10,7 @@ entries = []
 doc.css('.item').each do |item|
   description = item.css('.cont-description').first.text
 
-  if description.include?("PREGÃO") || description.include?("RECEBIMENTO DE TED") || description.include?("RETIRADA EM C/C") || description.include?("COMPRA DE OFERTA")
+  if description.include?("PREGÃO") || description.include?("RECEBIMENTO DE TED") || description.include?("RETIRADA EM C/C") || description.include?("COMPRA DE OFERTA") || description.include?("IRRF") || description.include?("NOTA *") || description.include?("TAXA DE REMUNERAÇÃO") || description.include?("EMOLUMENTOS") || description.include?("Taxa de intermediação tomador")
     next
   end
 
