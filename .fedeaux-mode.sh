@@ -158,3 +158,5 @@ alias ww='python3 ~/configuration/terminal_setuper/wordable.py'
 
 # commands
 alias kg='ruby ~/configuration/commands/kill_ghost_processes.rb'
+alias deploy='ruby ~/Work/fedeaux/deploy/deploy.rb'
+alias pull_prod='ruby ~/Work/fedeaux/deploy/pull_prod.rb'
