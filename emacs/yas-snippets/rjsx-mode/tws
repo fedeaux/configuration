@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: tws
+# key: tws
+# --
+style={tw('$0')}

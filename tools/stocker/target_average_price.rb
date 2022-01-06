@@ -1,6 +1,4 @@
-require 'json'
-require 'awesome_print'
-
+require 'stocker'
 
 # Finds the operation price I need to execute to change my current position while
 # landing on a new average price

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: rpr
+# key: rpr
+# --
+$1={$1} $2
