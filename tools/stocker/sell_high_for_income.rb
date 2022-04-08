@@ -44,23 +44,27 @@ def sell_high_for_income(
     )
 
   months.times do |i|
-    sell_profit = wallet * dy_wallet_sell_profit_ratio * 0.85
+    sell_profit = wallet * dy_wallet_sell_profit_ratio * 0.8
     earnings = wallet * monthly_dy
 
     wallet += sell_profit + earnings + monthly_input
 
-    puts "Month: #{i}"
-    puts "  Sell Profit: #{format_price(sell_profit)}"
-    puts "  Earnings: #{format_price(earnings)}"
-    puts "  Wallet: #{format_price(wallet)}"
-    puts ""
+    # puts "Month: #{i}"
+    # puts "  Sell Profit: #{format_price(sell_profit)}"
+    # puts "  Earnings: #{format_price(earnings)}"
+    # puts "  Wallet: #{format_price(wallet)}"
+    # puts ""
+
+    # puts "#{format_price(wallet, currency: '')};#{format_price(sell_profit, currency: '')}"
+    puts format_price(min_multiple_of(wallet, 5000), currency: '')
+    # puts format_price(sell_profit / 0.8, currency: '')
   end
 end
 
 sell_high_for_income(
-  months: 24,
-  wallet: 350_000,
-  monthly_input: 60_000,
-  monthly_dy: 0.07/12,
-  dy_wallet_sell_profit_ratio: 0.035
+  months: 18,
+  wallet: 300_000,
+  monthly_input: 50_000,
+  monthly_dy: 0,
+  dy_wallet_sell_profit_ratio: 0.05
 )

@@ -1,4 +1,4 @@
-require 'stocker'
+require_relative './stocker'
 
 # Finds the operation price I need to execute to change my current position while
 # landing on a new average price
@@ -56,7 +56,7 @@ def list_operation_target_price_options(current_position:, current_average_price
 
     verb = position_delta.positive? ? "buy" : "sell"
 
-    operation_target_price_options.push({ text: "#{verb} #{position_delta.abs} at #{format_price(operation_price)} (CASH: #{format_price(- operation_market_value)}, ML: #{format_price(new_market_value)})", price: round_price(operation_price), nature: 'target-average-price' })
+    operation_target_price_options.push({ text: "#{verb} #{position_delta.abs} at #{format_price(operation_price)} (CASH: #{format_price(- operation_market_value)}, ML: #{format_price(new_market_value)})", price: round_price(operation_price), nature: 'target-average-price', position_delta: position_delta })
   end
 
   operation_target_price_options.sort_by! do |operation_target_price_option|
@@ -190,14 +190,23 @@ json['TAEE11'] = list_operation_target_price_options(
   target_average_price: 36.0,
 )
 
+json['CPLE6'] = list_operation_target_price_options(
+  current_position: 19000,
+  current_average_price: 6.08,
+  target_average_price: 5.91,
+)
+
 # puts json['PSSA3']
 # puts json.to_json
 
-fuck = json['ITSA4'].map do |operation_target_price_option|
-  operation_target_price_option[:text]
-end.join "\n"
+# fuck = json['CPLE6'].map do |operation_target_price_option|
+#   operation_target_price_option[:text]
+# end.join "\n"
 
-puts fuck
+# puts fuck
+
+# puts find_operation_target_price(current_position: 2400, current_average_price: 6.27, target_position: 18000, target_average_price: 5.91)
+# puts find_new_average_price(current_position: 2400, current_average_price: 6.27, position_delta: 19000 - 2400, operation_price: 6.05)
 
 # json.slice('PSSA3', 'WIZS3').each do |code, operation_target_price_options|
 #   operation_target_price_options.each do |operation_target_price_option|
@@ -213,16 +222,85 @@ puts fuck
 # )
 
 # TODO
-def buy_more_and_then_sell_to_get_to_target_price_options(current_position:, current_average_price:, target_average_price:, buy_price: nil, max_operation_market_value: nil, min_position_delta: 100)
-  unless buy_price
-    puts "buy_price dude"
-  end
+def souvenir_trading_options(stock_code:, current_position:, current_average_price:, target_average_price:, enter_price: nil, operation_market_value: nil, min_position_delta: 100)
+  position_delta = min_multiple_of(operation_market_value / enter_price, min_position_delta)
 
-  position_delta = ((max_operation_market_value / buy_price) / min_position_delta).to_i * 100
-  operation_market_value = position_delta * buy_price
+  new_average_price = find_new_average_price(current_position: current_position, current_average_price: current_average_price, position_delta: position_delta, operation_price: enter_price)
 
-  new_position = current_position + position_delta
-  new_average_price = find_new_average_price current_position: current_position, current_average_price: current_average_price, position_delta: position_delta, operation_price: buy_price
+  result = [
+    "Buy #{position_delta} #{stock_code} at #{format_price(enter_price)} (#{format_price(enter_price * position_delta)}) for a new average of #{format_price(new_average_price)}"
+  ]
 
-  { position_delta: position_delta, operation_market_value: operation_market_value, new_average_price: new_average_price }
+  result.concat(list_operation_target_price_options(
+                  current_position: current_position + position_delta,
+                  current_average_price: new_average_price,
+                  target_average_price: target_average_price,
+                ).select do |operation_target_price_option|
+                  operation_target_price_option[:price] > (enter_price * 1.025) && operation_target_price_option[:position_delta] > - position_delta
+                end.map do |operation_target_price_option|
+                  final_position = current_position + position_delta + operation_target_price_option[:position_delta]
+
+                  operation_target_price_option[:text] + " - keep #{final_position} (#{format_price(final_position * target_average_price)})"
+                end).join "\n"
 end
+
+souvenir_trading_options(
+  stock_code: 'BBAS3',
+  current_position: 1800,
+  current_average_price: 28.79,
+  target_average_price: 27.50,
+  enter_price: 30.33,
+  operation_market_value: 50000
+)
+
+souvenir_trading_options(
+  stock_code: 'CPLE6',
+  current_position: 2600,
+  current_average_price: 6.27,
+  target_average_price: 5.91,
+  enter_price: 6.11,
+  operation_market_value: 120000
+)
+
+souvenir_trading_options(
+  stock_code: 'CSMG3',
+  current_position: 1900,
+  current_average_price: 13.06,
+  target_average_price: 11.17,
+  enter_price: 11.52,
+  operation_market_value: 90000
+)
+
+puts souvenir_trading_options(
+  stock_code: 'AURA33',
+  current_position: 50,
+  current_average_price: 45.37,
+  target_average_price: 40,
+  enter_price: 41,
+  operation_market_value: 120000,
+  min_position_delta: 1
+)
+
+souvenir_trading_options(
+  stock_code: 'VBBR3',
+  current_position: 0,
+  current_average_price: 0,
+  target_average_price: 17.49,
+  enter_price: 18.95,
+  operation_market_value: 100000
+)
+
+# fuck = json['BBAS3'].map do |operation_target_price_option|
+#   operation_target_price_option[:text]
+# end.join "\n"
+
+# TAEE11
+# find_operation_target_price(current_position: 800, current_average_price: 36.92, target_position: 2000, target_average_price: 35.99)
+
+# CPLE6
+# find_operation_target_price(current_position: 2600, current_average_price: 6.27, target_position: 16000, target_average_price: 6.18)
+
+# AURA33
+# find_operation_target_price(current_position: 2600, current_average_price: 6.27, target_position: 16000, target_average_price: 6.18)
+
+puts find_operation_target_price(current_position: 120000, current_average_price: 11.75, target_position: 150000, target_average_price: 11.80)

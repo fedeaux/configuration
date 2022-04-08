@@ -117,27 +117,27 @@ def distribute_inputs(target_input_price:, inputables_attributes: [])
 end
 
 distribute_inputs(
-  target_input_price: 100000 - 65000,
+  target_input_price: 95000,
   inputables_attributes: [
-    {
-      code: 'TAEE11',
-      current_position: 29_540,
-      target_percentage: 0.07,
-      price: 36,
-      min_batch: 100
-    },
     # {
-    #   code: 'CPLE6',
-    #   current_position: 16_287,
-    #   target_percentage: 0.08,
-    #   price: 6.19,
+    #   code: 'TAEE11',
+    #   current_position: 29_540,
+    #   target_percentage: 0.07,
+    #   price: 36,
     #   min_batch: 100
     # },
     {
+      code: 'CPLE6',
+      current_position: 16_287,
+      target_percentage: 0.08,
+      price: 5.91,
+      min_batch: 100
+    },
+    {
       code: 'BBAS3',
       current_position: 37479,
-      target_percentage: 0.065,
-      price: 28.89,
+      target_percentage: 0.07,
+      price: 28.33,
       min_batch: 100
     },
   ]

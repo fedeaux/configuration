@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: rails-concern
+# key: cncrn
+# --
+
+module $1
+  extend ActiveSupport::Concern
+
+  included do
+  end
+
+  module ClassMethods
+  end
+end

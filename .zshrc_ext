@@ -22,7 +22,7 @@ source /Users/fedorius/configuration/.functions
 source /Users/fedorius/configuration/.able
 source /Users/fedorius/configuration/.fedeaux-mode.sh
 
-export EDITOR="emacsclient"
+export EDITOR="/Applications/Emacs.app/Contents/MacOS/Emacs"
 echo 'export PATH="/usr/local/opt/imagemagick@6/bin:$PATH"' >> ~/.zshrc
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
