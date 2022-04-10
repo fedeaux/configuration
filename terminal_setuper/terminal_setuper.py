@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # brew install python3
 # pip3 install iterm2
 # pip3 install pyobjc
@@ -10,8 +8,8 @@
 
 import sys
 import iterm2
-import AppKit
 import asyncio
+import appkit
 from git import Repo
 
 class TerminalSetuper:

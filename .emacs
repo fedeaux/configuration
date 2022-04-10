@@ -91,7 +91,7 @@
   (setq ruby-insert-encoding-magic-comment nil)
   (setq enh-ruby-add-encoding-comment-on-save nil)
   (rvm-use-default)
-  (add-hook 'ruby-mode-hook 'flymake-ruby-load)
+  ;; (add-hook 'ruby-mode-hook 'flymake-ruby-load)
   (add-hook 'ruby-mode-hook 'robe-mode)
 
   ;; JS

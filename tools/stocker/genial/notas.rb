@@ -253,6 +253,8 @@ f2c = files2consolidation.values.sort_by(&:sortable_date)
 f2c.each do |consolidation|
   next unless consolidation.closed?
 
+  ap consolidation
+
   puts consolidation.to_csv
 end
 
