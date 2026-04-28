@@ -1,0 +1,19 @@
+# Gemfile
+source 'https://rubygems.org'
+
+# Screenshot capture
+gem 'chunky_png'
+gem 'rmagick'
+gem 'recursive-open-struct'
+
+# Color analysis
+gem 'color'
+
+# OCR for reading numbers (optional)
+gem 'rtesseract'
+
+# GUI interaction
+gem 'watir' # For browser automation
+gem 'selenium-webdriver'
+
+gem 'awesome_print'

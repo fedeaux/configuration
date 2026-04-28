@@ -1,5 +1,38 @@
 require 'yaml'
 require 'json'
+require "action_view"
+require "active_support/all"
+require 'awesome_print'
+require 'byebug'
+require 'date'
+require 'json'
+require 'ostruct'
+require 'table_print'
+# require 'nokogiri'
+require 'httparty'
+
+# class Hash
+#   def _deep_transform_keys_in_object(object, &block)
+#     case object
+#     when Hash
+#       object.each_with_object({}) do |(key, value), result|
+#         result[yield(key)] = _deep_transform_keys_in_object(value, &block)
+#       end
+#     when Array
+#       object.map { |e| _deep_transform_keys_in_object(e, &block) }
+#     else
+#       object
+#     end
+#   end
+
+#   def deep_transform_keys(&block)
+#     _deep_transform_keys_in_object(self, &block)
+#   end
+
+#   def deep_symbolize_keys
+#     deep_transform_keys { |key| key.to_sym rescue key }
+#   end
+# end
 
 class FedeauxMode
   CLASS_REGEX = r = /
@@ -9,13 +42,36 @@ class FedeauxMode
     \z           # match the end of the string
     /x           # free-spacing regex definition mode
 
-  def initialize(args)
-    @dir = args.first
-    load_dot_fedeaux
-    return unless args[1]
+  attr_accessor :a, :response
 
-    send args[1], *args[2..-1]
-    persist_dot_fedeaux
+  def initialize(args)
+    self.a = JSON.parse(args.first).deep_symbolize_keys
+    self.response = {}
+
+    # DUCT TAPE
+    if a[:command] == 'smart_guess'
+      self.smart_guess
+    end
+
+    puts self.response.to_json
+
+    # # puts "@a: #{@a.merge(porra: 'caralho')}"
+
+    # # puts "a: #{a}"
+    # # return
+
+    # # @dir = args.first
+    # # load_dot_fedeaux
+    # # return unless args[1]
+
+    # # send args[1], *args[2..-1]
+    # # persist_dot_fedeaux
+    # puts ({ te: 'respondo' }.to_json)
+
+    # options = []
+
+    # if @a[]
+    # end
   end
 
   def cmd(s)
@@ -58,9 +114,25 @@ class FedeauxMode
   end
 
   # Commands
-  def smart_guess(params)
-    region = params
-    puts smart_guess_region(region).to_json
+  def smart_guess
+    self.response[:smart] = true
+    options = []
+
+    if self.a[:file_name].last(5) == '.slim'
+      # options.push({ command: 'erb2slim' })
+
+      require 'erb2slim'
+
+      self.response = {
+        command: :replace,
+        target: :region,
+        with: Erb2Slim.convert(self.a[:selected_text])
+      }
+    end
+
+    # if options.count == 1
+    #   self.response[:command] = options.first
+    # end
   end
 
   def find_thing(thing_name)

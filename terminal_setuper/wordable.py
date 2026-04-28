@@ -1,4 +1,4 @@
-import iterm2, sys, asyncio, os, inspect
+import sys, asyncio, os, inspect, iterm2
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -22,7 +22,7 @@ class WordableTerminalSetuper(TerminalSetuper):
         session = self.window.current_tab.current_session
 
         await self.run_in_session(session, [
-            'docker-compose up',
+            'docker compose up',
             './bin/webpack-dev-server',
             'wgrok'
         ])

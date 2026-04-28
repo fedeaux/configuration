@@ -1,4 +1,4 @@
-import iterm2, sys, AppKit, asyncio, os, inspect
+import iterm2, sys, asyncio, os, inspect
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)

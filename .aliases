@@ -141,10 +141,10 @@ alias ywb='yarn webpack --config config/development/webpack.js --mode=developmen
 alias yef='yarn eslint --fix'
 
 # NGrok
-alias mgrok='ngrok http 3000 --subdomain=fedeaux'
+alias mgrok='ngrok http 3000 --domain=fedeaux.ngrok-free.dev'
 alias nrgrok='ngrok http 3000 --subdomain=naradio'
-alias wgrok='ngrok http 3000 --subdomain=wordable-fedeaux'
-alias ddgrok='ngrok http http://dodo.lvh.me:3000/ --subdomain=dodo'
+alias wgrok='ngrok http 3000 --domain=wordable-fedeaux.ngrok-free.dev'
+alias ddgrok='ngrok http http://dodo.lvh.me:3000/ --domain=d.ngrok-free.devodo'
 
 # other
 alias dcu='docker-compose up'
@@ -164,5 +164,9 @@ export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
+export DISABLE_SPRING=true
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
 # Stocker
 alias eh="ruby ~/configuration/tools/stocker/entry_helper.rb"
+alias z2j="/usr/local/Cellar/john-jumbo/1.9.0_1/share/john/zip2john"

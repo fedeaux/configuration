@@ -1,10 +1,13 @@
 ;; npm install -g prettier typescript
-
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 (require 'smartparens-ruby)
+(load "~/configuration/emacs/fedeaux-mode/mql-mode.el")
+(load "~/configuration/emacs/fedeaux-mode/emacs.el")
+(load "~/configuration/emacs/fedeaux-mode/themes/fedeaux-light-theme.el")
+(load "~/configuration/emacs/fedeaux-mode/themes/fedeaux-white-sand-theme.el")
 
 (setq ring-bell-function 'ignore)
 (custom-set-variables
@@ -12,10 +15,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auth-source-save-behavior nil)
  '(custom-safe-themes
-   '("04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" default))
+   '("2e33194d8a0462aba0aa31f09a61067edaea8b57ced86919bece8b7f655f8009" "b5df39cbce73b09140244bdfae0ac5e3fd4eccc966976e917afe3be8599628ba" "7b5909e52169f5ab61e200147cff389a3cefff33ffbdbd5a66ffdff7cc3abdc7" "f6640c96f6de4ead8399bf8b0c36766c299b9cc7823a6ea228dfd312688eabc0" "d6e59d5d3e1e4ec825322deed1e154251abecff0b2bb6d32ac62b117f623bd50" "04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" default))
+ '(flymd-markdown-file-type '("\\.txt\\'" "\\.md\\'" "\\.markdown\\'"))
  '(package-selected-packages
-   '(pine-script-mode nginx-mode php-mode highlight-indent-guides sass-mode prettier-js exec-path-from-shell tide coffee-mode web-mode slim-mode yaml-mode lsp-mode rjsx-mode projectile robe flymake-ruby smartparens rvm company yasnippet alect-themes))
+   '(lua-mode white-sand-theme csharp-mode pine-script-mode nginx-mode php-mode highlight-indent-guides sass-mode prettier-js exec-path-from-shell tide coffee-mode web-mode slim-mode yaml-mode lsp-mode rjsx-mode projectile robe flymake-ruby smartparens rvm company yasnippet alect-themes))
  '(tramp-backup-directory-alist '(("." . "~/tmp/emacs-stuff/")) t))
 
 (defun common-save-file ()
@@ -30,6 +35,7 @@
 
 (defun customize-stuff()
   (load-theme 'alect-black)
+  ;; (load-theme 'fedeaux-white-sand)
 
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
@@ -54,7 +60,6 @@
   ;; Random
   (column-number-mode 1)
   (delete-selection-mode 1)
-  (menu-bar-mode -1)
   (scroll-bar-mode -1)
   (show-smartparens-global-mode t)
   (smartparens-global-mode t)
@@ -76,16 +81,11 @@
   (setq highlight-indent-guides-highlighter-function 'custom-indent-guide-highlighter)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
-
   ;; Tmp files location
   (add-to-list 'backup-directory-alist
                (cons "." "~/tmp/emacs-stuff/"))
   (customize-set-variable
    'tramp-backup-directory-alist backup-directory-alist)
-
-  ;; Yas
-  (yas-global-mode 1)
-  (setq yas-snippet-dirs '("~/configuration/emacs/yas-snippets"))
 
   ;; Ruby
   (setq ruby-insert-encoding-magic-comment nil)
@@ -98,6 +98,8 @@
   (setq-default js2-basic-offset 2
                 js-indent-level 2)
 
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . javascript-mode))
+
   ;; Python
   (setq-default python-indent 2)
 
@@ -107,6 +109,7 @@
     (setq web-mode-markup-indent-offset 2)
     (setq web-mode-css-indent-offset 2)
     (setq web-mode-code-indent-offset 2)
+    (setq web-mode-enable-auto-indentation nil)
     )
   (add-hook 'web-mode-hook 'my-web-mode-hook)
   (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
@@ -126,13 +129,25 @@
     (setq indent-tabs-mode nil
           tab-width 2
           c-basic-offset 2))
+
+  ;; company
+  (setq company-idle-delay 0)
+  (setq company-dabbrev-downcase nil)
+  (setq company-dabbrev-ignore-case nil)
+  (setq company-minimum-prefix-length 1)
+
+  ;; yas
+  (setq yas-snippet-dirs '("~/configuration/emacs/yas-snippets"))
   )
 
 (defun local-ensure-key (key callback)
   (local-unset-key key)
   (local-set-key key callback)
   )
-
+(defun reload-all ()
+  (interactive)
+  (load-file "~/.emacs")
+  )
 (defun set-custom-keys ()
   (local-unset-key (kbd "<f9>"))
   (local-unset-key "\C-C\C-C")
@@ -143,21 +158,20 @@
   (local-ensure-key "\C-X\C-L" 'goto-line)
   (local-ensure-key "\C-C\C-S" 'sort-lines)
   (local-ensure-key "\C-X\C-Y" 'yas-insert-snippet)
-  (local-ensure-key "\C-L" 'reload-custom)
+  (local-ensure-key "\C-L" 'reload-all)
   (local-ensure-key "\C-C\C-E" 'eval-buffer)
   (local-ensure-key "\C-F\C-F" 'projectile-find-file)
   )
 
 (defun on-after-init ()
+  (yas-global-mode 1)
   (global-company-mode)
+  (push '(company-yasnippet company-dabbrev company-dabbrev-code company-robe) company-backends)
+  ;; (push '(company-yasnippet company-dabbrev-code company-robe) company-backends)
+  (menu-bar-mode t)
+  (global-auto-revert-mode 1)
   (server-start)
-  )
-
-(with-eval-after-load 'company-mode
-  (add-to-list
-   'company-backends
-   '(company-files company-dabbrev company-yasnippet company-robe company-inf-ruby company-tide company-lsp)
-   )
+  (setup-fedeaux-mode)
   )
 
 ;; source: http://steve.yegge.googlepages.com/my-dot-emacs-file
@@ -184,6 +198,10 @@
 (add-hook 'before-save-hook 'common-save-file)
 (add-hook 'after-change-major-mode-hook 'set-custom-keys)
 (add-hook 'after-init-hook 'on-after-init)
+
+;; (with-eval-after-load 'company
+;;   (interactive)
+;;   '(push 'company-yasnippet company-backends))
 
 (customize-stuff)
 (custom-set-faces

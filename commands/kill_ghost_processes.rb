@@ -1,6 +1,6 @@
 class KillGhostProcesses
   def initialize
-    @port = 3000
+    @port = 3001
   end
 
   def kill

@@ -1,6 +1,12 @@
 require 'pdf-reader'
 require_relative '../stocker.rb'
 
+class Wallet
+  def initialize
+    stocks = {}
+  end
+end
+
 class Operation
   attr_accessor :code, :nature, :count, :price, :total, :date
 
@@ -111,6 +117,7 @@ class Consolidation
   end
 
   def f_average_buy
+    return 0 if self.count_buy == 0
     format_price self.total_buy / self.count_buy
   end
 
@@ -198,7 +205,8 @@ end
 def files2operations
   operations = {}
 
-  ['2022-02', '2022-03', '2022-04'].each do |filename|
+  # ['2022-02', '2022-03', '2022-04'].each do |filename|
+  ['2023-03'].each do |filename|
     operations.merge!(file2operations(filename))
   end
 
@@ -243,20 +251,134 @@ def files2day_balance
   balance_per_day
 end
 
-# tp files2operations.values.flatten.sort_by(&:sortable_date), :date, :code, :total
+def files_to_taxes_json(filename)
+  cache_file = "#{__dir__}/notas/#{filename}-taxes.json"
+
+  unless File.exists?(cache_file)
+    costs_by_date = {}
+    latest_date = nil
+    total_costs = 0
+    operations_value = 0
+    total_value = 0
+    dates = 0
+    genial_lixo_proxima_linha = false
+
+    reader = PDF::Reader.new("#{__dir__}/notas/#{filename}.pdf")
+
+    reader.pages.each do |page|
+      text = page.text
+      next unless text.include? 'Valor líquido das operações'
+
+      date = text.match(/\d\d\/\d\d\/\d\d\d\d/)[0].to_s.strip
+
+      if latest_date != date
+        if latest_date
+          costs_by_date[latest_date] = {
+            operations_value: operations_value / 100.0,
+            total_value: total_value / 100.0,
+            total_costs: total_costs / 100.0
+          }
+        end
+
+        latest_date = date
+      end
+
+      text.split("\n").each do |line|
+        if line.include? 'Valor líquido das operações'
+          important_part = line.split('Valor líquido das operações').last.strip
+
+          operations_value = important_part.gsub(/[^\d]/, '').to_i
+
+          if important_part.last == 'D'
+            operations_value = -1 * operations_value
+          end
+        elsif line.include? 'Liquidação pelo Bruto'
+          important_part = line.last(30).strip
+          genial_lixo_total_value = important_part.gsub(/[^\d]/, '').to_i
+
+          if genial_lixo_total_value != 0
+            total_value = genial_lixo_total_value
+
+            if important_part.last == 'D'
+              total_value = -1 * total_value
+            end
+          end
+        elsif line.include? 'Líquido para'
+          important_part = line.last(30).strip
+          genial_lixo_total_value = important_part.gsub(/[^\d]/, '').to_i
+
+          if genial_lixo_total_value != 0
+            total_value = genial_lixo_total_value
+
+            if important_part.last == 'D'
+              total_value = -1 * total_value
+            end
+          end
+        end
+      end
+
+      total_costs = total_value - operations_value
+    end
+
+    costs_by_date[latest_date] = {
+      operations_value: operations_value / 100.0,
+      total_value: total_value / 100.0,
+      total_costs: total_costs / 100.0
+    }
+
+    costs_by_date
+
+    File.open(cache_file, 'w') do |f|
+      f.write costs_by_date.to_json
+    end
+  end
+
+  JSON.parse(File.read cache_file)
+end
+
+def files2taxes
+  costs_by_date = {}
+
+  ['2023-03'].each do |filename|
+    costs_by_date.merge! files_to_taxes_json filename
+  end
+
+  costs_by_month = {}
+
+  costs_by_date.each do |date, values|
+    month = date.split('/').last(2).join('/')
+    costs_by_month[month] ||= 0
+    costs_by_month[month] += values['total_costs']
+  end
+
+  costs_by_month
+  costs_by_date.values.map do |v|
+    v['total_costs']
+  end.sum
+end
+
+tp files2consolidation
+# files2operations.values.each do |operations|
+#   operations.each do |operation|
+#     ap operation
+#   end
+# end
+# # tp files2operations.values.flatten.sort_by(&:sortable_date), :date, :code, :total
+
+# ap files2day_balance
 
 # balances = files2day_balance
 # tp balances.values.sort_by(&:sortable_date).reverse, :date, :f_balance
 
-f2c = files2consolidation.values.sort_by(&:sortable_date)
+# f2c = files2consolidation.values.sort_by(&:sortable_date)
 
-f2c.each do |consolidation|
-  next unless consolidation.closed?
+# f2c.each do |consolidation|
+#   next unless consolidation.closed?
 
-  ap consolidation
+#   puts consolidation.to_csv
+# end
 
-  puts consolidation.to_csv
-end
+# nil
 
 # profits = f2c.select(&:closed?).select { |c| c.result >= 0 }
 # losses = f2c.select(&:closed?).select { |c| c.result < 0 }
@@ -270,3 +392,56 @@ end
 
 # puts "\nTotal"
 # puts format_price(f2c.select(&:closed?).map(&:result).sum)
+
+# {
+#     "01/02/2022" => -69.94,
+#     "02/02/2022" => -59.78,
+#     "03/02/2022" => -51.27,
+#     "04/02/2022" => -154.87,
+#     "07/02/2022" => -732.21,
+#     "08/02/2022" => -453.5,
+#     "09/02/2022" => -205.67,
+#     "10/02/2022" => -158.5,
+#     "11/02/2022" => -177.76,
+#     "14/02/2022" => -12.87,
+#     "15/02/2022" => -300.06,
+#     "17/02/2022" => -667.0,
+#     "18/02/2022" => -256.83,
+#     "21/02/2022" => -489.57,
+#     "22/02/2022" => -1825.11,
+#     "23/02/2022" => -8951.78,
+#     "24/02/2022" => -1980.12,
+#     "02/03/2022" => -293.55,
+#     "03/03/2022" => -2670.87,
+#     "04/03/2022" => -2598.62,
+#     "07/03/2022" => -450.22,
+#     "08/03/2022" => -24595.06,
+#     "09/03/2022" => -838.9,
+#     "10/03/2022" => -919.88,
+#     "11/03/2022" => -4532.15,
+#     "14/03/2022" => -1125.0,
+#     "15/03/2022" => -178.8,
+#     "16/03/2022" => -523.77,
+#     "17/03/2022" => -9826.34,
+#     "18/03/2022" => -110.15,
+#     "21/03/2022" => -479.86,
+#     "22/03/2022" => -1080.61,
+#     "23/03/2022" => -1484.87,
+#     "24/03/2022" => -1400.37,
+#     "25/03/2022" => -3.39,
+#     "28/03/2022" => -15.65,
+#     "30/03/2022" => -150.93,
+#     "01/04/2022" => -402.87,
+#     "04/04/2022" => -3725.0,
+#     "05/04/2022" => -1486.92,
+#     "06/04/2022" => -1122.67,
+#     "07/04/2022" => 5630.24,
+#     "08/04/2022" => -2054.06,
+#     "11/04/2022" => -1094.16,
+#     "12/04/2022" => -1620.74,
+#     "13/04/2022" => -935.29,
+#     "14/04/2022" => -1847.99,
+#     "18/04/2022" => -3307.17,
+#     "19/04/2022" => -1118.68,
+#     "20/04/2022" => -1.53
+# }

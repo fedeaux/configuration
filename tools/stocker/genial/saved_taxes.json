@@ -1,0 +1,267 @@
+{
+  "01/02/2022" => {
+    "operations_value" => -32580.0,
+    "total_value" => -32618.93,
+    "total_costs" => -38.93
+  },
+  "02/02/2022" => {
+    "operations_value" => 28042.0,
+    "total_value" => 27972.06,
+    "total_costs" => -69.94
+  },
+  "03/02/2022" => {
+    "operations_value" => 170284.0,
+    "total_value" => 170224.22,
+    "total_costs" => -59.78
+  },
+  "04/02/2022" => {
+    "operations_value" => -170927.0,
+    "total_value" => -170978.27,
+    "total_costs" => -51.27
+  },
+  "07/02/2022" => {
+    "operations_value" => 1645.0,
+    "total_value" => 1490.13,
+    "total_costs" => -154.87
+  },
+  "08/02/2022" => {
+    "operations_value" => -15045.0,
+    "total_value" => -15777.21,
+    "total_costs" => -732.21
+  },
+  "09/02/2022" => {
+    "operations_value" => -19126.0,
+    "total_value" => -19579.5,
+    "total_costs" => -453.5
+  },
+  "10/02/2022" => {
+    "operations_value" => 587676.0,
+    "total_value" => 587470.33,
+    "total_costs" => -205.67
+  },
+  "11/02/2022" => {
+    "operations_value" => -74274.51,
+    "total_value" => -74433.01,
+    "total_costs" => -158.5
+  },
+  "14/02/2022" => {
+    "operations_value" => -573260.0,
+    "total_value" => -573437.76,
+    "total_costs" => -177.76
+  },
+  "15/02/2022" => {
+    "operations_value" => 1443.97,
+    "total_value" => 1431.1,
+    "total_costs" => -12.87
+  },
+  "17/02/2022" => {
+    "operations_value" => -1599.0,
+    "total_value" => -1899.06,
+    "total_costs" => -300.06
+  },
+  "18/02/2022" => {
+    "operations_value" => 667.0,
+    "total_value" => 0.0,
+    "total_costs" => -667.0
+  },
+  "21/02/2022" => {
+    "operations_value" => -30311.85,
+    "total_value" => -30568.68,
+    "total_costs" => -256.83
+  },
+  "22/02/2022" => {
+    "operations_value" => -46668.0,
+    "total_value" => -47157.57,
+    "total_costs" => -489.57
+  },
+  "23/02/2022" => {
+    "operations_value" => -71517.0,
+    "total_value" => -73342.11,
+    "total_costs" => -1825.11
+  },
+  "24/02/2022" => {
+    "operations_value" => -50503.0,
+    "total_value" => -59454.78,
+    "total_costs" => -8951.78
+  },
+  "25/02/2022" => {
+    "operations_value" => -9541.0,
+    "total_value" => -11521.12,
+    "total_costs" => -1980.12
+  },
+  "02/03/2022" => {
+    "operations_value" => -4763.0,
+    "total_value" => -5397.1,
+    "total_costs" => -634.1
+  },
+  "03/03/2022" => {
+    "operations_value" => 6700.0,
+    "total_value" => 6406.45,
+    "total_costs" => -293.55
+  },
+  "04/03/2022" => {
+    "operations_value" => -2973.0,
+    "total_value" => -5643.87,
+    "total_costs" => -2670.87
+  },
+  "07/03/2022" => {
+    "operations_value" => 34029.0,
+    "total_value" => 31430.38,
+    "total_costs" => -2598.62
+  },
+  "08/03/2022" => {
+    "operations_value" => 5141.0,
+    "total_value" => 4690.78,
+    "total_costs" => -450.22
+  },
+  "09/03/2022" => {
+    "operations_value" => 0.0,
+    "total_value" => -24595.06,
+    "total_costs" => -24595.06
+  },
+  "10/03/2022" => {
+    "operations_value" => 3291.0,
+    "total_value" => 2452.1,
+    "total_costs" => -838.9
+  },
+  "11/03/2022" => {
+    "operations_value" => 221.0,
+    "total_value" => -698.88,
+    "total_costs" => -919.88
+  },
+  "14/03/2022" => {
+    "operations_value" => 0.0,
+    "total_value" => -4532.15,
+    "total_costs" => -4532.15
+  },
+  "15/03/2022" => {
+    "operations_value" => 1125.0,
+    "total_value" => 0.0,
+    "total_costs" => -1125.0
+  },
+  "16/03/2022" => {
+    "operations_value" => 1400.0,
+    "total_value" => 1221.2,
+    "total_costs" => -178.8
+  },
+  "17/03/2022" => {
+    "operations_value" => 7201.0,
+    "total_value" => 6677.23,
+    "total_costs" => -523.77
+  },
+  "18/03/2022" => {
+    "operations_value" => -43146.54,
+    "total_value" => -52972.88,
+    "total_costs" => -9826.34
+  },
+  "21/03/2022" => {
+    "operations_value" => -735.0,
+    "total_value" => -845.15,
+    "total_costs" => -110.15
+  },
+  "22/03/2022" => {
+    "operations_value" => -2922.0,
+    "total_value" => -3401.86,
+    "total_costs" => -479.86
+  },
+  "23/03/2022" => {
+    "operations_value" => -4207.0,
+    "total_value" => -5287.61,
+    "total_costs" => -1080.61
+  },
+  "24/03/2022" => {
+    "operations_value" => 31999.0,
+    "total_value" => 30514.13,
+    "total_costs" => -1484.87
+  },
+  "25/03/2022" => {
+    "operations_value" => -622.0,
+    "total_value" => -2022.37,
+    "total_costs" => -1400.37
+  },
+  "28/03/2022" => {
+    "operations_value" => -11335.82,
+    "total_value" => -11339.21,
+    "total_costs" => -3.39
+  },
+  "30/03/2022" => {
+    "operations_value" => -14365.04,
+    "total_value" => -14380.69,
+    "total_costs" => -15.65
+  },
+  "31/03/2022" => {
+    "operations_value" => 52.0,
+    "total_value" => -98.93,
+    "total_costs" => -150.93
+  },
+  "01/04/2022" => {
+    "operations_value" => -15102.14,
+    "total_value" => 0.0,
+    "total_costs" => 15102.14
+  },
+  "04/04/2022" => {
+    "operations_value" => -1293.0,
+    "total_value" => -1695.87,
+    "total_costs" => -402.87
+  },
+  "05/04/2022" => {
+    "operations_value" => 3725.0,
+    "total_value" => 0.0,
+    "total_costs" => -3725.0
+  },
+  "06/04/2022" => {
+    "operations_value" => 9226.0,
+    "total_value" => 7739.08,
+    "total_costs" => -1486.92
+  },
+  "07/04/2022" => {
+    "operations_value" => -27392.0,
+    "total_value" => -28514.67,
+    "total_costs" => -1122.67
+  },
+  "08/04/2022" => {
+    "operations_value" => -5630.24,
+    "total_value" => 0.0,
+    "total_costs" => 5630.24
+  },
+  "11/04/2022" => {
+    "operations_value" => -22211.0,
+    "total_value" => -24265.06,
+    "total_costs" => -2054.06
+  },
+  "12/04/2022" => {
+    "operations_value" => 8157.0,
+    "total_value" => 7062.84,
+    "total_costs" => -1094.16
+  },
+  "13/04/2022" => {
+    "operations_value" => -4585.0,
+    "total_value" => -6205.74,
+    "total_costs" => -1620.74
+  },
+  "14/04/2022" => {
+    "operations_value" => -25095.04,
+    "total_value" => -26030.33,
+    "total_costs" => -935.29
+  },
+  "18/04/2022" => {
+    "operations_value" => -8894.94,
+    "total_value" => -10742.93,
+    "total_costs" => -1847.99
+  },
+  "19/04/2022" => {
+    "operations_value" => 4313.0,
+    "total_value" => 1005.83,
+    "total_costs" => -3307.17
+  },
+  "20/04/2022" => {
+    "operations_value" => 414.0,
+    "total_value" => -704.68,
+    "total_costs" => -1118.68
+  },
+  "22/04/2022" => {
+    "operations_value" => 5153.0,
+    "total_value" => 5151.47,
+    "total_costs" => -1.53
+  }
+}

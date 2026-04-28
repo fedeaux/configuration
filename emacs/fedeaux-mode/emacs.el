@@ -3,14 +3,20 @@
 ;; Commands
 (defun fedeaux-mode-smart-guess()
   (interactive)
-  (mapcar
-   'fedeaux-mode-interpret-smart-guess
-   (json-read-from-string
-    (fedeaux-mode-command
-     (list "smart_guess" (get-selected-text))
-     )
-    )
-   )
+  (setq json_response (fedeaux-mode-command
+                       (list "smart_guess" (get-selected-text))
+                       ))
+
+  (message "response?")
+  (message json_response)
+  ;; (mapcar
+  ;;  'fedeaux-mode-interpret-smart-guess
+  ;;  (json-read-from-string
+  ;;   (fedeaux-mode-command
+  ;;    (list "smart_guess" (get-selected-text))
+  ;;    )
+  ;;   )
+  ;;  )
   )
 
 (defun fedeaux-mode-interpret-smart-guess(params)
@@ -47,19 +53,22 @@
 (defun fedeaux-mode-command(args)
   (interactive)
   (find-parent-root-directory)
-  (if fedeaux-mode-parent-root-directory
-      (let
-          (
-           (cmd
-            (format "ruby ~/configuration/fedeaux-mode/cli.rb %s %s %s"
-                    fedeaux-mode-parent-root-directory (car args) (concat "\"" (string-join (cdr args) " ") "\""))
-            )
-           )
-        ;; (message cmd)
-        (shell-command-to-string cmd)
-        )
-    (message "fedeaux-mode: Couldn't find root directory")
-    )
+  (setq fmcp (make-hash-table))
+  (puthash "root_dir" fedeaux-mode-parent-root-directory fmcp)
+  (puthash "command" (car args) fmcp)
+  (puthash "selected_text" (string-join (cdr args) " ") fmcp)
+  (puthash "file_name" (buffer-file-name) fmcp)
+
+  (setq json-fmcp (json-encode fmcp))
+  (setq cli-json-fmcp (concat "\"" (string-replace "\"" "\\\"" json-fmcp) "\""))
+
+  (message cli-json-fmcp)
+
+  (setq cmd
+        (format "ruby ~/configuration/emacs/fedeaux-mode/cli.rb %s" cli-json-fmcp))
+
+  (message cmd)
+  (shell-command cmd)
   )
 
 ;; General Helpers
@@ -160,7 +169,7 @@ just the parent component."
   (interactive)
   (local-set-key "\C-F\C-T" 'fedeaux-mode-find-thing)
   (local-set-key "\C-F\C-B" 'fedeaux-mode-find-branch)
-  (local-set-key "\C-F\C-G" 'fedeaux-mode-smart-guess)
+  (local-set-key "\C-F\C-S" 'fedeaux-mode-smart-guess)
   )
 
 (setup-fedeaux-mode)

@@ -9,8 +9,7 @@
 import sys
 import iterm2
 import asyncio
-import appkit
-from git import Repo
+# from git import Repo
 
 class TerminalSetuper:
     async def start(self, connection):

@@ -244,6 +244,9 @@ def souvenir_trading_options(stock_code:, current_position:, current_average_pri
                 end).join "\n"
 end
 
+def onep_dy_trading_options
+end
+
 souvenir_trading_options(
   stock_code: 'BBAS3',
   current_position: 1800,
@@ -271,7 +274,7 @@ souvenir_trading_options(
   operation_market_value: 90000
 )
 
-puts souvenir_trading_options(
+souvenir_trading_options(
   stock_code: 'AURA33',
   current_position: 50,
   current_average_price: 45.37,
@@ -279,6 +282,70 @@ puts souvenir_trading_options(
   enter_price: 41,
   operation_market_value: 120000,
   min_position_delta: 1
+)
+
+def twelve_dy_trading_options(stock_code:,
+                              current_position:,
+                              current_average_price:,
+                              enter_price:,
+                              yearly_dividends:,
+                              target_dividends:)
+
+  base_dy = yearly_dividends / enter_price
+  price_12dy = yearly_dividends / 0.12
+  stock_count = rm(target_dividends / yearly_dividends, 100)
+  puts "base_dy: #{(base_dy * 100.0).round(2)}%"
+  puts "price_12dy: #{price_12dy}"
+  puts "stock_count: #{stock_count}"
+
+  initial_position = current_position + stock_count + 100
+
+  possible_operations = []
+
+  while(initial_position < stock_count * 4)
+    average_price = ((current_position * current_average_price) +
+                     (initial_position - current_position) * enter_price) / initial_position
+
+    list_operation_target_price_options(
+      current_position: initial_position,
+      current_average_price: average_price,
+      target_average_price: price_12dy,
+    ).each do |operation_option|
+      next if operation_option[:position_delta] > 0
+
+      final_position = initial_position + operation_option[:position_delta]
+      next if final_position != stock_count
+
+      operation_option[:text] = "Buy #{initial_position} @ #{enter_price} (#{initial_position * enter_price}) and #{operation_option[:text]}"
+
+      possible_operations.push operation_option
+      # puts operation_option[:text]
+    end
+
+    initial_position += 100
+  end
+
+  possible_operations.map do |operation|
+    operation[:text]
+  end
+end
+
+twelve_dy_trading_options(
+  stock_code: 'MYPK3',
+  current_position: 0,
+  current_average_price: 0,
+  enter_price: 11.50,
+  yearly_dividends: 0.85,
+  target_dividends: 1000,
+)
+
+puts twelve_dy_trading_options(
+  stock_code: 'VBBR3',
+  current_position: 200,
+  current_average_price: 16.75,
+  enter_price: 16.75,
+  yearly_dividends: 1.1,
+  target_dividends: 1000,
 )
 
 souvenir_trading_options(

@@ -39,7 +39,7 @@ class FedeauxTerminalSetuper(TerminalSetuper):
         await self.cd(session)
 
         commands = [
-            'docker-compose up',
+            'docker compose up',
             'ywb',
             'nodemon dist/dev-server.js --watch dist/dev-server.js'
         ]

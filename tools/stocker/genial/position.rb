@@ -6,7 +6,7 @@
 
 require_relative '../stocker'
 
-html_doc = Nokogiri::HTML File.read("#{__dir__}/position/2022-apr-06.html")
+html_doc = Nokogiri::HTML File.read("#{__dir__}/position/2022-apr-10.html")
 dy_wallet_stocks_map = {}
 fiis_map = {}
 
@@ -23,13 +23,18 @@ end
 %w[
     CSAN3
     GOAU4
-    KLBN11
     CSMG3
-    BBAS3
+    SAPR11
     VIVT3
+    ITSA4
+    FESA4
+    B3SA3
+    KLBN11
+    SUZB3
+    RANI3
     IRBR3
     PSSA3
-    SULA11
+    WIZS3
     CPLE6
     ENBR3
     EGIE3
@@ -37,11 +42,10 @@ end
     TRPL4
     ALUP11
     AURA33
-    EQIX34
+    RIOT34
     SIMN34
     P1LD34
     CATP34
-    CMCS34
     MMMC34
     A1TM34
   ].each do |code|
@@ -66,9 +70,7 @@ end
 
 other_stocks = []
 
-html_doc.css('tr')[0].tap do |tr|
-  puts tr.css('th').map(&:text).join('  |  ')
-end
+csv = html_doc.css('tr')[0].css('th').map(&:text).join('  |  ')
 
 html_doc.css('tr')[1..-1].map do |tr|
   tds = tr.css('td')
@@ -84,19 +86,19 @@ html_doc.css('tr')[1..-1].map do |tr|
   stock.count = tds[2].text.gsub(/[^\d]/, '').to_i
 end
 
-tp dy_wallet_stocks_map.values, :code, :count, :current_position
+# tp dy_wallet_stocks_map.values, :code, :count, :current_position
 
-csv = dy_wallet_stocks_map.values.map do |stock|
+csv += dy_wallet_stocks_map.values.map do |stock|
   [stock.code, stock.count, stock.current_position].join ';'
 end.join "\n"
 
-csv += "\n   -----------------  "
+csv += "\n   ----------------- \n"
 
 csv += fiis_map.values.map do |stock|
   [stock.code, stock.count, stock.current_position].join ';'
 end.join "\n"
 
-csv += "\n   -----------------  "
+csv += "\n   ----------------- \n"
 
 csv += other_stocks.map do |stock|
   [stock.code, stock.count, stock.current_position].join ';'

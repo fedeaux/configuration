@@ -140,21 +140,34 @@ alias yrd='yarn run dev'
 
 # NGrok
 alias mgrok='ngrok http 3000 --subdomain=fedeaux'
+alias m1grok='ngrok http 3001 --subdomain=fedeaux'
 alias nrgrok='ngrok http 3000 --subdomain=naradio'
 alias ggrok='ngrok http 3000 --subdomain=getaway'
 
 # other
-alias dcu='docker-compose up'
+alias dcu='docker compose up'
 alias rfa='redis-cli flushall'
 
 # fedeaux.com
 alias fw='python3 ~/configuration/terminal_setuper/fedeaux.py'
 alias lw='python3 ~/configuration/terminal_setuper/livestock.py'
+alias lpm='python3 ~/configuration/terminal_setuper/livestock_processing.py'
 alias dw='python3 ~/configuration/terminal_setuper/dodo.py'
 alias bw='python3 ~/configuration/terminal_setuper/blog.py'
+alias rw='python3 ~/configuration/terminal_setuper/retirement.py'
+alias rwp='python3 ~/configuration/terminal_setuper/retirement_processing.py'
+alias srw='python3 ~/configuration/terminal_setuper/slim_retirement.py'
+alias mw='python3 ~/configuration/terminal_setuper/mtg_printer.py'
+alias pw='python3 ~/configuration/terminal_setuper/print.py'
+alias fxw='python3 ~/configuration/terminal_setuper/fitdeaux.py'
 
 # wordable
 alias ww='python3 ~/configuration/terminal_setuper/wordable.py'
+alias wt='python3 ~/configuration/terminal_setuper/wordable_spec.py'
+
+# clickupper
+alias cuw='python3 ~/configuration/terminal_setuper/clickupper.py'
+alias cur='python3 ~/configuration/terminal_setuper/clickupper_resync.py'
 
 # commands
 alias kg='ruby ~/configuration/commands/kill_ghost_processes.rb'

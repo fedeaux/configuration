@@ -7,7 +7,7 @@
 
 # iTerm => Preferences => General => Magic => Enable Python Api
 
-import iterm2, sys, AppKit, asyncio, os, inspect
+import iterm2, sys, asyncio, os, inspect
 
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -28,14 +28,14 @@ class BraindamageTerminalSetuper(TerminalSetuper):
         session = self.window.current_tab.current_session
 
         await self.run_in_session(session, [
-            'docker-compose up',
-            './bin/webpack-dev-server',
+            'docker compose up',
             'mgrok'
         ])
 
         tabs = [
             [
                 'rails server',
+                './bin/dev',
                 'bundle exec sidekiq'
             ],
             [
