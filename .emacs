@@ -1,9 +1,33 @@
 ;; npm install -g prettier typescript
+;; Ensure tree-sitter is enabled and set up the grammar repositories
+(require 'treesit)
+
+;; Set the default installation directory (optional, but clean)
+(setq treesit-extra-load-path '("~/.emacs.d/tree-sitter/"))
+
+;; Reinstall the grammars
+;; (dolist (grammar treesit-language-source-alist)
+;;   (treesit-install-language-grammar (car grammar)))
+
+(setq treesit-language-source-alist
+      '((javascript "https://github.com/tree-sitter/tree-sitter-javascript" "v0.23.0")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
+
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
+(unless package-archive-contents
+  (package-refresh-contents))
 
-(require 'smartparens-ruby)
+;; Ensure use-package is installed
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(require 'use-package)
+(require 'ruby-end)
+
+(setq use-package-always-ensure t)
+
 (load "~/configuration/emacs/fedeaux-mode/mql-mode.el")
 (load "~/configuration/emacs/fedeaux-mode/emacs.el")
 (load "~/configuration/emacs/fedeaux-mode/themes/fedeaux-light-theme.el")
@@ -17,10 +41,15 @@
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
  '(custom-safe-themes
-   '("2e33194d8a0462aba0aa31f09a61067edaea8b57ced86919bece8b7f655f8009" "b5df39cbce73b09140244bdfae0ac5e3fd4eccc966976e917afe3be8599628ba" "7b5909e52169f5ab61e200147cff389a3cefff33ffbdbd5a66ffdff7cc3abdc7" "f6640c96f6de4ead8399bf8b0c36766c299b9cc7823a6ea228dfd312688eabc0" "d6e59d5d3e1e4ec825322deed1e154251abecff0b2bb6d32ac62b117f623bd50" "04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481" default))
+   '("2e33194d8a0462aba0aa31f09a61067edaea8b57ced86919bece8b7f655f8009"
+     "b5df39cbce73b09140244bdfae0ac5e3fd4eccc966976e917afe3be8599628ba"
+     "7b5909e52169f5ab61e200147cff389a3cefff33ffbdbd5a66ffdff7cc3abdc7"
+     "f6640c96f6de4ead8399bf8b0c36766c299b9cc7823a6ea228dfd312688eabc0"
+     "d6e59d5d3e1e4ec825322deed1e154251abecff0b2bb6d32ac62b117f623bd50"
+     "04dd0236a367865e591927a3810f178e8d33c372ad5bfef48b5ce90d4b476481"
+     default))
  '(flymd-markdown-file-type '("\\.txt\\'" "\\.md\\'" "\\.markdown\\'"))
- '(package-selected-packages
-   '(lua-mode white-sand-theme csharp-mode pine-script-mode nginx-mode php-mode highlight-indent-guides sass-mode prettier-js exec-path-from-shell tide coffee-mode web-mode slim-mode yaml-mode lsp-mode rjsx-mode projectile robe flymake-ruby smartparens rvm company yasnippet alect-themes))
+ '(package-selected-packages nil)
  '(tramp-backup-directory-alist '(("." . "~/tmp/emacs-stuff/")) t))
 
 (defun common-save-file ()
@@ -35,10 +64,12 @@
 
 (defun customize-stuff()
   (load-theme 'alect-black)
+  (setq ns-menu-bar-color "black")
   ;; (load-theme 'fedeaux-white-sand)
 
   (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "PATH"))
 
   ;; Ido
   (ido-mode 1)
@@ -72,13 +103,13 @@
   (setq scroll-margin 7)
 
   ;; Indent Highlight
-  (defun custom-indent-guide-highlighter (level responsive display)
-    (if (> 1 level)
-        nil
-      (highlight-indent-guides--highlighter-default level responsive display)))
+  ;; (defun custom-indent-guide-highlighter (level responsive display)
+  ;;   (if (> 1 level)
+  ;;       nil
+  ;;     (highlight-indent-guides--highlighter-default level responsive display)))
 
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-highlighter-function 'custom-indent-guide-highlighter)
+  ;; (setq highlight-indent-guides-method 'character)
+  ;; (setq highlight-indent-guides-highlighter-function 'custom-indent-guide-highlighter)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
   ;; Tmp files location
@@ -89,6 +120,7 @@
 
   ;; Ruby
   (setq ruby-insert-encoding-magic-comment nil)
+  (setq ruby-end-insert-newline -1)  ;; This might already be the default
   (setq enh-ruby-add-encoding-comment-on-save nil)
   (rvm-use-default)
   ;; (add-hook 'ruby-mode-hook 'flymake-ruby-load)
@@ -99,6 +131,15 @@
                 js-indent-level 2)
 
   (add-to-list 'auto-mode-alist '("\\.jsx\\'" . javascript-mode))
+
+  ;; Install jtsx
+  (use-package jtsx
+    :ensure t
+    :mode (("\\.jsx\\'" . jtsx-jsx-mode)
+           ("\\.tsx\\'" . jtsx-tsx-mode))
+    :config
+    ;; Enable electric closing tag (auto-closes when you type `>`)
+    (setq jtsx-enable-jsx-electric-closing-element t))
 
   ;; Python
   (setq-default python-indent 2)
@@ -121,6 +162,7 @@
     )
 
   (add-hook 'rjsx-mode-hook 'tide-setup-hook)
+  (add-hook 'jtsx-jsx-mode-hook 'tide-setup-hook)
 
   ;; php
   (add-hook 'php-mode-hook 'my-php-mode-hook)
@@ -166,9 +208,8 @@
 (defun on-after-init ()
   (yas-global-mode 1)
   (global-company-mode)
+  (push '(company-yasnippet company-dabbrev-code company-robe) company-backends)
   (push '(company-yasnippet company-dabbrev company-dabbrev-code company-robe) company-backends)
-  ;; (push '(company-yasnippet company-dabbrev-code company-robe) company-backends)
-  (menu-bar-mode t)
   (global-auto-revert-mode 1)
   (server-start)
   (setup-fedeaux-mode)
@@ -199,9 +240,9 @@
 (add-hook 'after-change-major-mode-hook 'set-custom-keys)
 (add-hook 'after-init-hook 'on-after-init)
 
-;; (with-eval-after-load 'company
-;;   (interactive)
-;;   '(push 'company-yasnippet company-backends))
+(with-eval-after-load 'company
+  (interactive)
+  '(push 'company-yasnippet company-backends))
 
 (customize-stuff)
 (custom-set-faces
