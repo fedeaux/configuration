@@ -16,6 +16,15 @@ sys.path.insert(0,parentdir)
 from terminal_setuper import TerminalSetuper
 
 class BraindamageTerminalSetuper(TerminalSetuper):
+    def second_tab_concat(self):
+        return []
+
+    def third_tab(self):
+        return [
+            'rails console',
+            'clear'
+        ]
+
     async def start(self, connection):
         app = await iterm2.async_get_app(connection)
         self.window = app.current_window
@@ -37,12 +46,9 @@ class BraindamageTerminalSetuper(TerminalSetuper):
                 'rails server',
                 './bin/dev',
                 'bundle exec sidekiq'
-            ],
-            [
-                'rails console',
-                'clear'
-            ]
+            ] + self.second_tab_concat(),
+            self.third_tab()
         ]
 
         for commands in tabs:
-            await self.run_in_new_tab(commands)
+             await self.run_in_new_tab(commands)

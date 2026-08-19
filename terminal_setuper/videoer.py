@@ -10,6 +10,13 @@ class VideoerTerminalSetuper(BraindamageTerminalSetuper):
     def __init__(self):
         self.app = { 'path': os.environ['TERMINAL_SETUPER_VIDEOER_PATH'] }
 
+    def third_tab(self):
+        return [
+            'rails console',
+            'rails videos:watch',
+            'clear'
+        ]
+
 async def main(connection):
     await VideoerTerminalSetuper().start(connection)
 

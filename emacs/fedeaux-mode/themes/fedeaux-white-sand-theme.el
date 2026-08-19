@@ -1,4 +1,4 @@
-;;; fedeaux-white-sand-theme.el --- Emacs theme with a light background.
+;;; fedeaux-white-sand-theme.el --- Emacs theme with a light background.  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014 , Martin Haesler
 

@@ -1,3 +1,12 @@
+;; -*- lexical-binding: t; -*-
+
+;; Suppress lexical-binding warnings for old packages
+(setq warning-suppress-types '((lexical-binding)))
+(setq warning-suppress-log-types '((lexical-binding)))
+(setq byte-compile-warnings '(not lexical))
+(setq warning-minimum-level :emergency)  ; Only show critical warnings
+(modify-all-frames-parameters '((inhibit-double-buffering . t)))
+
 ;; npm install -g prettier typescript
 ;; Ensure tree-sitter is enabled and set up the grammar repositories
 (require 'treesit)
@@ -41,7 +50,8 @@
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
  '(custom-safe-themes
-   '("2e33194d8a0462aba0aa31f09a61067edaea8b57ced86919bece8b7f655f8009"
+   '("9afcf2d0d88a677acd2c5db94e867fff840beef6bf2dbcdae25a61a1fb5ffd2b"
+     "2e33194d8a0462aba0aa31f09a61067edaea8b57ced86919bece8b7f655f8009"
      "b5df39cbce73b09140244bdfae0ac5e3fd4eccc966976e917afe3be8599628ba"
      "7b5909e52169f5ab61e200147cff389a3cefff33ffbdbd5a66ffdff7cc3abdc7"
      "f6640c96f6de4ead8399bf8b0c36766c299b9cc7823a6ea228dfd312688eabc0"
@@ -110,7 +120,7 @@
 
   ;; (setq highlight-indent-guides-method 'character)
   ;; (setq highlight-indent-guides-highlighter-function 'custom-indent-guide-highlighter)
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  ;; (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 
   ;; Tmp files location
   (add-to-list 'backup-directory-alist
@@ -139,7 +149,15 @@
            ("\\.tsx\\'" . jtsx-tsx-mode))
     :config
     ;; Enable electric closing tag (auto-closes when you type `>`)
-    (setq jtsx-enable-jsx-electric-closing-element t))
+    (setq jtsx-auto-indent nil)  ; <-- FLICKERING ADDED THIS
+    (setq jtsx-enable-jsx-electric-closing-element t)
+    (setq-local js-indent-level 2)
+    (setq-local js2-basic-offset 2)
+    (setq jtsx-indent-level 2)
+    ;; (setq jtsx-auto-close-tags t)
+    ;; (add-hook 'jtsx-jsx-mode-hook 'electric-pair-mode)
+    ;; (add-hook 'jtsx-tsx-mode-hook 'electric-pair-mode)
+    )
 
   ;; Python
   (setq-default python-indent 2)
@@ -158,8 +176,15 @@
   (defun tide-setup-hook()
     (interactive)
     (tide-setup)
-    (prettier-js-mode)
+    (prettier-mode)
+    ;; (prettier-js-mode)
     )
+
+  (use-package prettier
+    :ensure t
+    :hook (js-mode-hook . prettier-mode)
+    :hook (rjsx-mode-hook . prettier-mode)
+    :hook (web-mode-hook . prettier-mode))
 
   (add-hook 'rjsx-mode-hook 'tide-setup-hook)
   (add-hook 'jtsx-jsx-mode-hook 'tide-setup-hook)
@@ -179,6 +204,7 @@
   (setq company-minimum-prefix-length 1)
 
   ;; yas
+  (setq yas-prompt-functions '(yas-no-prompt))
   (setq yas-snippet-dirs '("~/configuration/emacs/yas-snippets"))
   )
 
@@ -209,7 +235,7 @@
   (yas-global-mode 1)
   (global-company-mode)
   (push '(company-yasnippet company-dabbrev-code company-robe) company-backends)
-  (push '(company-yasnippet company-dabbrev company-dabbrev-code company-robe) company-backends)
+  ;; (push '(company-yasnippet company-dabbrev company-dabbrev-code company-robe) company-backends)
   (global-auto-revert-mode 1)
   (server-start)
   (setup-fedeaux-mode)
@@ -243,6 +269,38 @@
 (with-eval-after-load 'company
   (interactive)
   '(push 'company-yasnippet company-backends))
+
+(defun ensure-keybinding (key expected-fn)
+  "If KEY is not bound to EXPECTED-FN, bind it."
+  (let* ((key-vector (if (vectorp key) key (kbd key)))
+         (current-fn (lookup-key global-map key-vector)))
+    (unless (eq current-fn expected-fn)
+      (global-set-key key-vector expected-fn)
+      (message "Bound %s to %s (was %s)"
+               (key-description key-vector)
+               expected-fn
+               current-fn))))
+
+;; (defun fix-mac-port-keybindings ()
+;;   "Ensure macOS keybindings work correctly on the Mac port."
+;;   (interactive)
+;;   ;; Standard macOS shortcuts
+;;   (ensure-keybinding "M-z" 'undo)
+;;   (ensure-keybinding "M-S-z" 'undo-redo)
+;;   (ensure-keybinding "M-x" 'kill-region)           ; Cut
+;;   (ensure-keybinding "M-c" 'kill-ring-save)        ; Copy
+;;   (ensure-keybinding "M-v" 'yank)                  ; Paste
+;;   (ensure-keybinding "M-a" 'mark-whole-buffer)     ; Select all
+;;   (ensure-keybinding "M-s" 'save-buffer)           ; Save
+
+;;   ;; Backspace
+;;   (ensure-keybinding "M-<backspace>" 'backward-kill-word)
+;;   (ensure-keybinding "A-<backspace>" 'backward-kill-word)
+;;   (ensure-keybinding "M-<delete>" 'kill-word)
+
+;;   (message "Mac port keybindings fixed!"))
+
+;; (add-hook 'after-init-hook 'fix-mac-port-keybindings)
 
 (customize-stuff)
 (custom-set-faces
