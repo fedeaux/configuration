@@ -21,14 +21,6 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; Tree-sitter Setup
-(require 'treesit)
-(setq treesit-extra-load-path '("~/.emacs.d/tree-sitter/"))
-(setq treesit-language-source-alist
-      '((javascript "https://github.com/tree-sitter/tree-sitter-javascript" "v0.23.0")
-        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")))
-
 ;; Load Custom Modes & Themes safely
 (when (file-exists-p "~/configuration/emacs/fedeaux-mode/mql-mode.el")
   (load "~/configuration/emacs/fedeaux-mode/mql-mode.el"))
@@ -120,26 +112,21 @@
   (use-package robe
     :hook (ruby-mode . robe-mode))
 
-  ;; JS / TS
+  ;; JS / TS / JSX
   (setq-default js2-basic-offset 2
                 js-indent-level 2)
 
-  (use-package jtsx
-    :mode (("\\.jsx\\'" . jtsx-jsx-mode)
-           ("\\.tsx\\'" . jtsx-tsx-mode))
+  (use-package typescript-mode
+    :mode "\\.ts\\'"
     :config
-    (setq jtsx-auto-indent t)
-    (setq jtsx-enable-jsx-electric-closing-element t)
-    (setq jtsx-indent-level 2)
+    (setq typescript-indent-level 2))
 
-    :hook
-    ((jtsx-jsx-mode jtsx-tsx-mode) .
-     (lambda ()
-       ;; Tell tree-sitter to use parent node indentation when encountering incomplete JSX syntax
-       (setq-local treesit-indent-fallback-on-error t)
-
-       ;; Ensure Emacs uses syntax-based indent first, completion second
-       (setq-local tab-always-indent 'complete))))
+  (use-package rjsx-mode
+    :mode (("\\.jsx\\'" . rjsx-mode)
+           ("\\.tsx\\'" . rjsx-mode))
+    :config
+    (setq js-indent-level 2)
+    (setq sgml-basic-offset 2))
 
   ;; Python
   (setq-default python-indent-offset 2)
@@ -155,7 +142,7 @@
 
   ;; Prettier & Tide
   (use-package tide
-    :after typescript-mode)
+    :after (typescript-mode rjsx-mode))
 
   (defun tide-setup-hook ()
     (interactive)
@@ -165,10 +152,11 @@
   (use-package prettier
     :hook ((js-mode . prettier-mode)
            (rjsx-mode . prettier-mode)
+           (typescript-mode . prettier-mode)
            (web-mode . prettier-mode)))
 
   (add-hook 'rjsx-mode-hook 'tide-setup-hook)
-  (add-hook 'jtsx-jsx-mode-hook 'tide-setup-hook)
+  (add-hook 'typescript-mode-hook 'tide-setup-hook)
 
   ;; PHP
   (add-hook 'php-mode-hook
@@ -177,19 +165,46 @@
                     tab-width 2
                     c-basic-offset 2)))
 
+  ;; Yasnippet
+  (use-package yasnippet
+    :config
+    (setq yas-prompt-functions '(yas-no-prompt))
+    (setq yas-snippet-dirs '("~/configuration/emacs/yas-snippets"))
+
+    ;; Define a function to expand snippet OR fallback to default indent/completion
+    ;; (defun check-expansion ()
+    ;;   (interactive)
+    ;;   (if (and (boundp 'yas-minor-mode)
+    ;;            yas-minor-mode
+    ;;            (yas-expand))
+    ;;       t
+    ;;     (company-indent-for-tab-command)))
+    (defun check-expansion ()
+      (interactive)
+      (if (and (boundp 'yas-minor-mode)
+               yas-minor-mode
+               (yas-expand))
+          t
+        (if (and (boundp 'company-my-key-custom) ; fallback check
+                 (company-complete-selection))
+            t
+          (company-complete-selection))))
+    :bind
+    (:map company-active-map
+          ("TAB" . check-expansion)
+          ("<tab>" . check-expansion))
+    )
+
   ;; Company
   (use-package company
     :config
     (setq company-idle-delay 0)
     (setq company-dabbrev-downcase nil)
     (setq company-dabbrev-ignore-case nil)
-    (setq company-minimum-prefix-length 1))
-
-  ;; Yasnippet
-  (use-package yasnippet
-    :config
-    (setq yas-prompt-functions '(yas-no-prompt))
-    (setq yas-snippet-dirs '("~/configuration/emacs/yas-snippets"))))
+    (setq company-minimum-prefix-length 1)
+    (setq company-selection-wrap-around t)
+    )
+  )
 
 ;; Keybinding Utilities
 (defun reload-all ()
@@ -214,6 +229,7 @@
   (when (fboundp 'global-company-mode)
     (global-company-mode 1)
     (setq company-backends '((company-yasnippet company-dabbrev-code company-robe))))
+  (electric-pair-mode 1)
   (global-auto-revert-mode 1)
   (unless (and (fboundp 'server-running-p) (server-running-p))
     (server-start))
