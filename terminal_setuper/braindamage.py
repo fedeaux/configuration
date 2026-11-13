@@ -21,6 +21,7 @@ class BraindamageTerminalSetuper(TerminalSetuper):
 
     def third_tab(self):
         return [
+            'claude -c',
             'rails console',
             'clear'
         ]
@@ -43,7 +44,7 @@ class BraindamageTerminalSetuper(TerminalSetuper):
 
         tabs = [
             [
-                'rails server',
+                'rails s -b 0.0.0.0',
                 './bin/dev',
                 'bundle exec sidekiq'
             ] + self.second_tab_concat(),

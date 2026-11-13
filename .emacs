@@ -30,6 +30,8 @@
   (load "~/configuration/emacs/fedeaux-mode/themes/fedeaux-light-theme.el"))
 (when (file-exists-p "~/configuration/emacs/fedeaux-mode/themes/fedeaux-white-sand-theme.el")
   (load "~/configuration/emacs/fedeaux-mode/themes/fedeaux-white-sand-theme.el"))
+(when (file-exists-p "~/configuration/emacs/videoer-script-mode.el")
+  (load "~/configuration/emacs/videoer-script-mode.el"))
 
 (setq ring-bell-function 'ignore)
 
@@ -149,6 +151,7 @@
     (when (fboundp 'tide-setup) (tide-setup))
     (prettier-mode 1))
 
+  ;; Prettier
   (use-package prettier
     :hook ((js-mode . prettier-mode)
            (rjsx-mode . prettier-mode)

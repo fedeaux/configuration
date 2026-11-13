@@ -10,12 +10,32 @@ class VideoerTerminalSetuper(BraindamageTerminalSetuper):
     def __init__(self):
         self.app = { 'path': os.environ['TERMINAL_SETUPER_VIDEOER_PATH'] }
 
-    def third_tab(self):
-        return [
-            'rails console',
-            'rails videos:watch',
-            'clear'
+
+    async def setup(self):
+        self.current_app = self.app
+
+        session = self.window.current_tab.current_session
+
+        await self.run_in_session(session, [
+            'docker compose up',
+            'mgrok'
+        ])
+
+        tabs = [
+            [
+                'rails s -b 0.0.0.0',
+                './bin/dev',
+                'bundle exec sidekiq'
+            ],
+            [
+                'rails console',
+                '',
+                'clear'
+            ]
         ]
+
+        for commands in tabs:
+             await self.run_in_new_tab(commands)
 
 async def main(connection):
     await VideoerTerminalSetuper().start(connection)
