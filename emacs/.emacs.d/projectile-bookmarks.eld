@@ -1,1 +1,0 @@
-("~/Work/fedeaux/live-stock/" "~/configuration/" "~/Work/open-source/emacs/emacs/")

@@ -1,0 +1,163 @@
+# General-purpose aliases. Project launchers live in shell/projects.
+
+# ── General ──────────────────────────────────────────────
+alias c='clear'
+alias l='ls -la'
+alias o='open'
+alias oe='open -a Emacs'
+alias size='du -sh'
+alias pag='ps aux | grep'
+alias ip='ifconfig | grep 192'
+alias rb='. ~/.zshrc'
+alias rlb='. ~/.zshrc'
+
+# search
+alias a='c && ack'
+alias s='c && ack -Q'
+alias ff='find . | grep'
+alias fm='find ~/Music | grep'
+
+# media / apps
+alias opf='o ~/Music/_/GP/Tabs/'
+alias dv='viddl-rb'
+alias new_fire='/Applications/Firefox.app/Contents/MacOS/firefox -no-remote -ProfileManager > /dev/null'
+
+# ── Git ──────────────────────────────────────────────────
+alias gs='git status'
+alias ga='git add'
+alias gap='git add . -p'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gm='git merge --no-ff'
+alias gbl='git blame -L'
+alias gl="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
+
+# diff
+alias gd='git diff'
+alias gd0='git diff -U0'
+alias gdc='git diff --cached'
+alias gdev='git diff $(gdevb).. --'
+
+# branches / checkout
+alias gb='git branch'
+alias gdevb='git branch | grep "^  develop"'
+alias gbm='git branch -m'
+alias gbd='git branch -d'
+alias gbD='git branch -D'
+alias gx='git checkout'
+alias gxb='git checkout -b'
+alias gxl='git checkout -'
+alias gxm='git checkout main'
+alias gxd='git checkout $(gdevb)'
+
+# rebase
+alias gr='git rebase'
+alias grm='git rebase main'
+alias grd='git rebase $(gdevb)'
+alias grc='git rebase --continue'
+alias grs='git rebase --skip'
+alias gra='git rebase --abort'
+alias grtd='gxd && gpld && gxl && grd'   # rebase current branch on fresh develop
+
+# stash / reset
+alias gst='git stash'
+alias gstp='git stash pop'
+alias grh='git reset HEAD'
+alias grha='git reset HEAD *'
+
+# remote
+alias gfo='git fetch origin'
+alias gpo='git push origin HEAD'
+alias gpom='git push origin main'
+alias gpl='git pull origin'
+alias gplm='git pull origin main'
+alias gpld='git pull origin $(gdevb)'
+
+# tags
+alias gt='git tag -a'
+alias gtd='git tag -d'
+alias gpot='git push origin --tags'
+
+# be careful
+alias gops='git commit --amend --no-edit'
+alias gundo='git reset --soft HEAD~'
+alias gdont='ga . && gops && gpo -f'
+alias gsave='ga . && gcm save'
+
+# ── Ruby / Rails ─────────────────────────────────────────
+alias rake='noglob rake'
+alias rr='rubocop -a --display-cop-names'
+
+alias rc='rails console'
+alias rs='rails server'
+alias rs1='rails server -p 3001'
+alias rs2='rails server -p 3002'
+alias rs3='rails server -p 3003'
+alias rs4='rails server -p 3004'
+alias rs5='rails server -p 3005'
+alias rst='rails server --environment=test'
+alias rgmr='rails g migration'
+alias rgdm='rails g data_migration'
+
+alias rdm='rake db:migrate'
+alias rdr='rake db:rollback'
+alias rdrm='rake db:rollback && rake db:migrate'
+alias rds='rake db:seed'
+alias rdd='rake dev:deploy'
+alias rjc='rake jobs:clear'
+alias rjw='rake jobs:work'
+alias rjwo='rake jobs:workoff'
+
+alias bes='bundle exec sidekiq'
+alias fs='bundle exec foreman start'
+
+# tests
+alias t='c && rspec'
+alias td='c && rspec --order defined --format documentation'
+alias tuf='t spec/models spec/requests spec/jobs spec/services spec/controllers'
+alias ct='c && cucumber'
+alias pt='c && rake parallel:spec'
+alias rpp='rake parallel:prepare'
+
+# ── Node ─────────────────────────────────────────────────
+alias yrd='yarn run dev'
+alias yef='yarn eslint --fix'
+alias ywb='yarn webpack --config config/development/webpack.js --mode=development --watch'
+alias yibw='yarn install && ./bin/webpack-dev-server'
+
+# ── Python ───────────────────────────────────────────────
+alias python='python3'
+alias pip='pip3'
+
+# ── Deploy: Heroku / Capistrano ──────────────────────────
+alias gphm='git push heroku main'
+alias gpsm='git push staging main'
+alias gpall='gpo && gphm'
+
+alias hr='heroku run'
+alias hb='heroku run bash'
+alias hrc='heroku run rails console'
+alias hrdm='heroku run rake db:migrate'
+alias hrdr='heroku run rake db:rollback'
+alias hrds='heroku run rake db:seed'
+
+alias cpd='cap production deploy'
+alias cpdr='cap production deploy:restart'
+alias cpsr='cap production sidekiq:restart'
+alias cpss='cap production sidekiq:stop'
+alias wpnd='wp && ga . && gcm wp && gpo && cpd'
+
+# ── ngrok ────────────────────────────────────────────────
+alias mgrok='ngrok http 3000 --subdomain=fedeaux'
+alias m1grok='ngrok http 3001 --subdomain=fedeaux'
+alias nrgrok='ngrok http 3000 --subdomain=naradio'
+alias ggrok='ngrok http 3000 --subdomain=getaway'
+alias wgrok='ngrok http 3000 --domain=wordable-fedeaux.ngrok-free.dev'
+alias ddgrok='ngrok http http://dodo.lvh.me:3000/ --domain=d.ngrok-free.devodo'
+
+# ── Services ─────────────────────────────────────────────
+alias dcu='docker compose up'
+alias rfa='redis-cli flushall'
+
+# ── Misc tools ───────────────────────────────────────────
+alias z2j='/usr/local/Cellar/john-jumbo/1.9.0_1/share/john/zip2john'

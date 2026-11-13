@@ -1,0 +1,57 @@
+plugins=(ruby)
+
+up-line-or-local-history() {
+    zle set-local-history 1
+    zle up-line-or-history
+    zle set-local-history 0
+}
+zle -N up-line-or-local-history
+
+down-line-or-local-history() {
+    zle set-local-history 1
+    zle down-line-or-history
+    zle set-local-history 0
+}
+zle -N down-line-or-local-history
+
+bindkey "126" up-line-or-local-history
+bindkey "125" down-line-or-local-history
+
+source $HOME/configuration/shell/aliases
+source $HOME/configuration/shell/functions
+source $HOME/configuration/shell/able
+source $HOME/configuration/shell/projects
+
+# Android
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+export DISABLE_SPRING=true
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+export EDITOR="/Applications/Emacs.app/Contents/MacOS/Emacs"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# ==> libpq
+# libpq is keg-only, which means it was not symlinked into /usr/local,
+# because conflicts with postgres formula.
+
+# If you need to have libpq first in your PATH run:
+# echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.zshrc
+
+# For compilers to find libpq you may need to set:
+# export LDFLAGS="-L/usr/local/opt/libpq/lib"
+# export CPPFLAGS="-I/usr/local/opt/libpq/include"
+
+# For pkg-config to find libpq you may need to set:
+# export PKG_CONFIG_PATH="/usr/local/opt/libpq/lib/pkgconfig"
+
+export PATH="/usr/local/opt/libpq/bin:$PATH"
+
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
+export PATH="/usr/local/opt/mysql-client/bin:$PATH"

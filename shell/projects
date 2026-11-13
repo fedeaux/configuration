@@ -1,0 +1,40 @@
+# Project launchers and project-specific commands.
+
+TS=~/configuration/terminal_setuper
+
+# ── terminal_setuper: open iTerm tab layouts per project ─
+# fedeaux.com
+alias fw="python3 $TS/fedeaux.py"
+alias bw="python3 $TS/blog.py"
+alias dw="python3 $TS/dodo.py"
+alias vw="python3 $TS/videoer.py"
+alias mw="python3 $TS/mtg_printer.py"
+alias pw="python3 $TS/print.py"
+alias fxw="python3 $TS/fitdeaux.py"
+alias lw="python3 $TS/livestock.py"
+alias lpm="python3 $TS/livestock_processing.py"
+alias rw="python3 $TS/retirement.py"
+alias rwp="python3 $TS/retirement_processing.py"
+alias srw="python3 $TS/slim_retirement.py"
+
+# wordable
+alias ww="python3 $TS/wordable.py"
+alias wt="python3 $TS/wordable_spec.py"
+
+# clickupper
+alias cuw="python3 $TS/clickupper.py"
+alias cur="python3 $TS/clickupper_resync.py"
+
+unset TS
+
+# ── fedeaux deploy ───────────────────────────────────────
+alias deploy='ruby ~/Work/fedeaux/deploy/deploy.rb'
+alias pull_prod='ruby ~/Work/fedeaux/deploy/pull_prod.rb'
+
+# ── other projects ───────────────────────────────────────
+alias fnr='uv run fikolas render'
+alias fdx_fm='ruby ~/Work/runa/api/hcrx/folder_manipulator.rb'
+
+# ── configuration/tools ──────────────────────────────────
+alias kg='ruby ~/configuration/tools/dev/kill_ghost_processes.rb'
+alias eh='ruby ~/configuration/tools/finance/stocker/entry_helper.rb'
